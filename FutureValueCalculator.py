@@ -13,7 +13,7 @@ marketPrice=InputUtils.readDecimalParam("请输入市场价(decimal): \n",0)
 
 #Market trade charge fee. In reality, the buy sell rate is about %0.9
 #tradingTaxRate=readDecimalParam("请输入交易印花税(decimal, default 0.01): \n",0.01)
-tradingTaxRate=Decimal("0.01")
+tradingTaxRate=Decimal("1")/100
 
 #Annually profit per share
 profitPerShare=InputUtils.readDecimalParam("请输入当前每股年利润(decimal): \n",0)
@@ -22,20 +22,20 @@ profitPerShare=InputUtils.readDecimalParam("请输入当前每股年利润(decim
 companyDuration=InputUtils.readIntParam("请输入考虑的存续期(int, default 30): \n",30)
 
 #the corp loan interest rate is about %7 for real estate industry
-discountRate=InputUtils.readDecimalParam("请输入折现率(decimal, default 0.07): \n","0.07")
+discountRate=InputUtils.readDecimalParam("请输入折现率(decimal, default 7%): \n","7.0") / 100
 
 #the growth here uses the cpi to represent "no growth"
-growth=InputUtils.readDecimalParam("请输入利润的年增长率(decimal, default 0.01): \n","0.01")
+growth=InputUtils.readDecimalParam("请输入利润的年增长率(decimal, default 1%): \n","1.0") / 100
 
 #Two stage of growth model. HSG time and growth rate
 highSpeedGrowthDuration=InputUtils.readIntParam("请输入预计高速增长的年份(int, default 5):\n", 5)
-highSpeedGrowthRate=InputUtils.readDecimalParam("请输入高速增长的年增长率(decimal, default 0):\n",0)
+highSpeedGrowthRate=InputUtils.readDecimalParam("请输入高速增长的年增长率(decimal, default 0%):\n",0) / 100
 
 #The dispatched cash rate, or the profit sharing rate
-profitSharingRate=InputUtils.readDecimalParam("请输入年化分红派息的比例(decimal, default 0.2): \n","0.2")
+profitSharingRate=InputUtils.readDecimalParam("请输入年化分红派息的比例(decimal, default 20%): \n","20.0") / 100
 #profit sharing tax rate is about %1 for less than 1 year, and %0.5 for more than 1 year
 #profitSharingTaxRate=readDecimalParam("请输入分红派息的所得税\n(decimal, default 0.1): \n",0.1)
-profitSharingTaxRate=Decimal("0.005")
+profitSharingTaxRate=Decimal("0.5") / 100
 
 #Following are for calculating stock share holding fee. ONLY HK bank has such charge
 annuallyFee=0
@@ -43,27 +43,27 @@ volume=1000
 
 #The depression loop years for the whole industry
 depressionFrequency=InputUtils.readIntParam("请输入预计的衰退周期(int, default 7): \n", 7)
-depressionLossRate=InputUtils.readDecimalParam("请输入衰退期的利润损失率(decimal, default 0.5): \n", "0.5")
+depressionLossRate=InputUtils.readDecimalParam("请输入衰退期的利润损失率(decimal, default 90%): \n", "90.0") / 100
 
 #This is to calculate the trade charge fee for buy / sell
-stockHeldDuration=InputUtils.readIntParam("请输入持股的买卖周期(int, default 5): \n", 5)
+stockHeldDuration=InputUtils.readIntParam("请输入持股的买卖周期(int, default 10): \n", 10)
 
 #Before proceed, print out input params
 print ("\n================")
 print ("当前市价=" +  str(marketPrice))
-print ("交易印花税="+ str(tradingTaxRate))
+print ("交易印花税="+ str(tradingTaxRate * 100) + "%")
 print ("每股净利润="+ str(profitPerShare))
 print ("存续年份="+ str(companyDuration))
-print ("折现率=" + str(discountRate))
-print ("增长率=" + str(growth))
-print ("高速增长率="+str(highSpeedGrowthRate))
+print ("折现率=" + str(discountRate * 100) + "%")
+print ("增长率=" + str(growth * 100) + "%")
+print ("高速增长率="+str(highSpeedGrowthRate * 100) + "%")
 print ("高速增长的年份=" + str(highSpeedGrowthDuration))
-print ("分红派息比例=" + str(profitSharingRate))
-print ("分红所得税率=" + str(profitSharingTaxRate))
+print ("分红派息比例=" + str(profitSharingRate * 100) + "%")
+print ("分红所得税率=" + str(profitSharingTaxRate * 100) + "%")
 print ("年化持股费用="+str(annuallyFee))
 print ("购买股数="+str(volume))
 print ("衰退期="+str(depressionFrequency))
-print ("衰退期损失率="+str(depressionLossRate))
+print ("衰退期损失率="+str(depressionLossRate * 100) + "%")
 print ("买卖周期="+str(stockHeldDuration))
 print ("================")
 
