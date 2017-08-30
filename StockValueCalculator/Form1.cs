@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Configuration;
+using System.Globalization;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace StockValueCalculator
@@ -35,9 +38,41 @@ namespace StockValueCalculator
         private decimal totalSellTax;
         private decimal currentGrowth;
 
+        private string successMessage = PromptMessages.successMessageEN;
+        private string parseCompanyDetailsFormatError = PromptMessages.parseCompanyDetailsFormatErrorEN;
+        private string parseCompanyDetailsSuccessMessage = PromptMessages.parseCompanyDetailsSuccessMessageEN;
+
         public Form1()
         {
             InitializeComponent();
+            setLanguagePreference();
+        }
+
+        private void setLanguagePreference()
+        {
+            CultureInfo info = Thread.CurrentThread.CurrentUICulture;
+            if (info.Name.Equals("zh-cn", StringComparison.CurrentCultureIgnoreCase))
+            {
+                lblMarketPrice.Text = ConfigurationManager.AppSettings.Get("txtMarketPrice_zh");
+                lblTradeTaxRate.Text = ConfigurationManager.AppSettings.Get("txtTradingTaxRate_zh");
+                lblProfitPerShare.Text = ConfigurationManager.AppSettings.Get("txtProfitPerShare_zh");
+                lblProfitSharingRate.Text = ConfigurationManager.AppSettings.Get("txtProfitSharingRate_zh");
+                lblCompanyDuration.Text = ConfigurationManager.AppSettings.Get("txtCompanyDuration_zh");
+                lblDiscountRate.Text = ConfigurationManager.AppSettings.Get("txtDiscountRate_zh");
+                lblNormalGrowthRate.Text = ConfigurationManager.AppSettings.Get("txtNormalGrowthRate_zh");
+                lblHighSpeedGrowthRate.Text = ConfigurationManager.AppSettings.Get("txtHighSpeedGrowthRate_zh");
+                lblHighSpeedGrowthDuration.Text = ConfigurationManager.AppSettings.Get("txtHighSpeedGrowthDuration_zh");
+                lblProfitSharingTax.Text = ConfigurationManager.AppSettings.Get("txtProfitSharingTaxRate_zh");
+                lblDepressionFrequency.Text = ConfigurationManager.AppSettings.Get("txtDepressionFrequency_zh");
+                lblDepressionLossRate.Text = ConfigurationManager.AppSettings.Get("txtDepressionLossRate_zh");
+                lblStockHeldDuration.Text = ConfigurationManager.AppSettings.Get("txtStockHeldDuration_zh");
+                btnParseCompanyDetails.Text = ConfigurationManager.AppSettings.Get("btnParseCompanyDetails_zh");
+                btnCalculate.Text = ConfigurationManager.AppSettings.Get("btnCalculate_zh");
+
+                successMessage = PromptMessages.successMessageZH;
+                parseCompanyDetailsFormatError = PromptMessages.parseCompanyDetailsFormatErrorZH;
+                parseCompanyDetailsSuccessMessage = PromptMessages.parseCompanyDetailsSuccessMessageZH;
+            }
         }
 
         private void btnCalculate_Click(object sender, EventArgs e)
@@ -79,35 +114,16 @@ namespace StockValueCalculator
             }
             totalSellTax = totalSellTax + resultForSell * currentInterest * tradingTaxRate;
 
-            StringBuilder sb = new StringBuilder();
-            sb.Append("***********************************************\n");
-            sb.Append("Inner value after deduct profit sharing: ");
-            sb.Append(decimal.Round(totalInnerValue, 5));
-            sb.Append("\n***********************************************\n");
-            sb.Append("\n\n");
-            sb.Append("***********************************************\n");
-            sb.Append("Total profit sharing: ");
-            sb.Append(decimal.Round(totalProfitSharing, 5));
-            sb.Append("\n");
-            sb.Append("Total trading tax paid: ");
-            sb.Append(decimal.Round(totalTradingTaxPaid, 5));
-            sb.Append("\n");
-            sb.Append("Total buy tax paid: ");
-            sb.Append(decimal.Round(totalBuyTax, 5));
-            sb.Append("\n");
-            sb.Append("Total sell tax paid: ");
-            sb.Append(decimal.Round(totalSellTax, 5));
-            sb.Append("\n");
-            sb.Append("Total inner value for this stock: ");
-            sb.Append(decimal.Round(totalInnerValue + totalProfitSharing - totalBuyTax - totalSellTax - totalTradingTaxPaid, 5));
-            sb.Append("\n***********************************************\n");
-            sb.Append("\n\n");
-            sb.Append("***********************************************\n");
-            sb.Append("Market Price/Inner Value: ");
-            sb.Append(decimal.Round(marketPrice / (totalInnerValue + totalProfitSharing - totalBuyTax - totalSellTax - totalTradingTaxPaid) * 100,5) + "%");
-            sb.Append("\n***********************************************\n");
+            string displaySuccessMessage = successMessage
+                                                .Replace("[_INNER_VALUE_DEDUCT_PROFIT_SHARING_]", Convert.ToString(decimal.Round(totalInnerValue, 5)))
+                                                .Replace("[_PROFIT_SHARING_]", Convert.ToString(decimal.Round(totalProfitSharing, 5)))
+                                                .Replace("[_TRADING_TAX_PAID_]", Convert.ToString(decimal.Round(totalTradingTaxPaid, 5)))
+                                                .Replace("[_BUY_TAX_PAID_]", Convert.ToString(decimal.Round(totalBuyTax, 5)))
+                                                .Replace("[_SELL_TAX_PAID_]",Convert.ToString(decimal.Round(totalSellTax, 5)))
+                                                .Replace("[_INNER_VALUE_]", Convert.ToString(decimal.Round(totalInnerValue + totalProfitSharing - totalBuyTax - totalSellTax - totalTradingTaxPaid, 5)))
+                                                .Replace("[_MARKET_PRICE_TO_INNER_VALUE_]", Convert.ToString(decimal.Round(marketPrice / (totalInnerValue + totalProfitSharing - totalBuyTax - totalSellTax - totalTradingTaxPaid) * 100, 5)));
 
-            MessageBox.Show(sb.ToString(),"Calculation Result");
+            MessageBox.Show(displaySuccessMessage, "Calculation Result");
         }
 	        
         private void resetTempCalVariables()
@@ -209,7 +225,7 @@ namespace StockValueCalculator
 
             if (!selectedFilePath.EndsWith(".csv"))
             {
-                MessageBox.Show("The selected company details file must be a csv file!", "File Format Error");
+                MessageBox.Show(parseCompanyDetailsFormatError, "File Format Error");
                 return;
             }
 
@@ -218,7 +234,7 @@ namespace StockValueCalculator
                 parseInputParametersFromFile(line);
             }
 
-            MessageBox.Show("Successfully parsed company details from file [" + selectedFilePath + "]!");
+            MessageBox.Show(parseCompanyDetailsSuccessMessage.Replace("[_FILE_PATH_]", selectedFilePath));
         }
     }
 }

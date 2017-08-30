@@ -53,7 +53,7 @@
             this.txtDepressionLossRate = new System.Windows.Forms.TextBox();
             this.lblDepressionLossRate = new System.Windows.Forms.Label();
             this.txtStockHeldDuration = new System.Windows.Forms.TextBox();
-            this.lblStockHoldDuration = new System.Windows.Forms.Label();
+            this.lblStockHeldDuration = new System.Windows.Forms.Label();
             this.btnCalculate = new System.Windows.Forms.Button();
             this.btnParseCompanyDetails = new System.Windows.Forms.Button();
             this.openFileDialogForCompanyDetails = new System.Windows.Forms.OpenFileDialog();
@@ -271,14 +271,14 @@
             this.txtStockHeldDuration.TabIndex = 26;
             this.txtStockHeldDuration.Text = "10";
             // 
-            // lblStockHoldDuration
+            // lblStockHeldDuration
             // 
-            this.lblStockHoldDuration.AutoSize = true;
-            this.lblStockHoldDuration.Location = new System.Drawing.Point(37, 519);
-            this.lblStockHoldDuration.Name = "lblStockHoldDuration";
-            this.lblStockHoldDuration.Size = new System.Drawing.Size(223, 15);
-            this.lblStockHoldDuration.TabIndex = 25;
-            this.lblStockHoldDuration.Text = "Stock Held Duration (year):";
+            this.lblStockHeldDuration.AutoSize = true;
+            this.lblStockHeldDuration.Location = new System.Drawing.Point(37, 519);
+            this.lblStockHeldDuration.Name = "lblStockHeldDuration";
+            this.lblStockHeldDuration.Size = new System.Drawing.Size(223, 15);
+            this.lblStockHeldDuration.TabIndex = 25;
+            this.lblStockHeldDuration.Text = "Stock Held Duration (year):";
             // 
             // btnCalculate
             // 
@@ -312,7 +312,7 @@
             this.Controls.Add(this.btnParseCompanyDetails);
             this.Controls.Add(this.btnCalculate);
             this.Controls.Add(this.txtStockHeldDuration);
-            this.Controls.Add(this.lblStockHoldDuration);
+            this.Controls.Add(this.lblStockHeldDuration);
             this.Controls.Add(this.txtDepressionLossRate);
             this.Controls.Add(this.lblDepressionLossRate);
             this.Controls.Add(this.txtDepressionFrequency);
@@ -371,7 +371,7 @@
         private System.Windows.Forms.TextBox txtDepressionLossRate;
         private System.Windows.Forms.Label lblDepressionLossRate;
         private System.Windows.Forms.TextBox txtStockHeldDuration;
-        private System.Windows.Forms.Label lblStockHoldDuration;
+        private System.Windows.Forms.Label lblStockHeldDuration;
         private System.Windows.Forms.Button btnCalculate;
         private System.Windows.Forms.Button btnParseCompanyDetails;
         private System.Windows.Forms.OpenFileDialog openFileDialogForCompanyDetails;
