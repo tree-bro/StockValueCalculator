@@ -1,1 +1,4 @@
-This is a simple program to calculate the inner value for a stock after taking some commonly seen operations into consideration.
+# StockValueCalculation
+This is a windows form application for calculating stock inner value
+
+The python script for calculation has been moved to the sub folder.

@@ -1,0 +1,11 @@
+E:\hx\source\StockValueCalculationForm\StockValueCalculator\bin\Debug\StockValueCalculator.exe.config
+E:\hx\source\StockValueCalculationForm\StockValueCalculator\bin\Debug\StockValueCalculator.exe
+E:\hx\source\StockValueCalculationForm\StockValueCalculator\bin\Debug\StockValueCalculator.pdb
+E:\hx\source\StockValueCalculationForm\StockValueCalculator\obj\Debug\StockValueCalculator.Form1.resources
+E:\hx\source\StockValueCalculationForm\StockValueCalculator\obj\Debug\StockValueCalculator.Properties.Resources.resources
+E:\hx\source\StockValueCalculationForm\StockValueCalculator\obj\Debug\StockValueCalculationForm.csproj.GenerateResource.Cache
+E:\hx\source\StockValueCalculationForm\StockValueCalculator\obj\Debug\StockValueCalculator.exe
+E:\hx\source\StockValueCalculationForm\StockValueCalculator\obj\Debug\StockValueCalculator.pdb
+E:\hx\source\StockValueCalculator\StockValueCalculator\bin\Debug\StockValueCalculator.exe.config
+E:\hx\source\StockValueCalculator\StockValueCalculator\obj\Debug\StockValueCalculator.exe
+E:\hx\source\StockValueCalculator\StockValueCalculator\obj\Debug\StockValueCalculator.pdb
