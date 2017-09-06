@@ -62,6 +62,8 @@
             this.calculationPage = new System.Windows.Forms.TabPage();
             this.stockMarketPage = new System.Windows.Forms.TabPage();
             this.groupBoxForStockInfo = new System.Windows.Forms.GroupBox();
+            this.lblDateOfInfo = new System.Windows.Forms.Label();
+            this.txtDateOfInfo = new System.Windows.Forms.TextBox();
             this.lblSelectedStockID = new System.Windows.Forms.Label();
             this.lblCompanyProfitPerShare = new System.Windows.Forms.Label();
             this.lblCompanyName = new System.Windows.Forms.Label();
@@ -71,8 +73,8 @@
             this.txtStockID = new System.Windows.Forms.TextBox();
             this.txtCompanyName = new System.Windows.Forms.TextBox();
             this.btnRetrieveStockInfo = new System.Windows.Forms.Button();
-            this.lblDateOfInfo = new System.Windows.Forms.Label();
-            this.txtDateOfInfo = new System.Windows.Forms.TextBox();
+            this.lblPERatio = new System.Windows.Forms.Label();
+            this.txtPERatio = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.calculationPage.SuspendLayout();
             this.stockMarketPage.SuspendLayout();
@@ -426,6 +428,8 @@
             // 
             // groupBoxForStockInfo
             // 
+            this.groupBoxForStockInfo.Controls.Add(this.lblPERatio);
+            this.groupBoxForStockInfo.Controls.Add(this.txtPERatio);
             this.groupBoxForStockInfo.Controls.Add(this.lblDateOfInfo);
             this.groupBoxForStockInfo.Controls.Add(this.txtDateOfInfo);
             this.groupBoxForStockInfo.Controls.Add(this.lblSelectedStockID);
@@ -438,10 +442,29 @@
             this.groupBoxForStockInfo.Controls.Add(this.txtCompanyName);
             this.groupBoxForStockInfo.Location = new System.Drawing.Point(6, 6);
             this.groupBoxForStockInfo.Name = "groupBoxForStockInfo";
-            this.groupBoxForStockInfo.Size = new System.Drawing.Size(366, 199);
+            this.groupBoxForStockInfo.Size = new System.Drawing.Size(366, 232);
             this.groupBoxForStockInfo.TabIndex = 40;
             this.groupBoxForStockInfo.TabStop = false;
             this.groupBoxForStockInfo.Text = "StockInfo";
+            // 
+            // lblDateOfInfo
+            // 
+            this.lblDateOfInfo.AutoSize = true;
+            this.lblDateOfInfo.Location = new System.Drawing.Point(11, 91);
+            this.lblDateOfInfo.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblDateOfInfo.Name = "lblDateOfInfo";
+            this.lblDateOfInfo.Size = new System.Drawing.Size(83, 12);
+            this.lblDateOfInfo.TabIndex = 41;
+            this.lblDateOfInfo.Text = "Date of Info:";
+            // 
+            // txtDateOfInfo
+            // 
+            this.txtDateOfInfo.Enabled = false;
+            this.txtDateOfInfo.Location = new System.Drawing.Point(170, 89);
+            this.txtDateOfInfo.Margin = new System.Windows.Forms.Padding(2);
+            this.txtDateOfInfo.Name = "txtDateOfInfo";
+            this.txtDateOfInfo.Size = new System.Drawing.Size(184, 21);
+            this.txtDateOfInfo.TabIndex = 40;
             // 
             // lblSelectedStockID
             // 
@@ -476,19 +499,19 @@
             // txtCompanyProfitPerShare
             // 
             this.txtCompanyProfitPerShare.Enabled = false;
-            this.txtCompanyProfitPerShare.Location = new System.Drawing.Point(188, 153);
+            this.txtCompanyProfitPerShare.Location = new System.Drawing.Point(170, 153);
             this.txtCompanyProfitPerShare.Margin = new System.Windows.Forms.Padding(2);
             this.txtCompanyProfitPerShare.Name = "txtCompanyProfitPerShare";
-            this.txtCompanyProfitPerShare.Size = new System.Drawing.Size(160, 21);
+            this.txtCompanyProfitPerShare.Size = new System.Drawing.Size(184, 21);
             this.txtCompanyProfitPerShare.TabIndex = 39;
             // 
             // txtLastTradingPrice
             // 
             this.txtLastTradingPrice.Enabled = false;
-            this.txtLastTradingPrice.Location = new System.Drawing.Point(188, 121);
+            this.txtLastTradingPrice.Location = new System.Drawing.Point(170, 121);
             this.txtLastTradingPrice.Margin = new System.Windows.Forms.Padding(2);
             this.txtLastTradingPrice.Name = "txtLastTradingPrice";
-            this.txtLastTradingPrice.Size = new System.Drawing.Size(160, 21);
+            this.txtLastTradingPrice.Size = new System.Drawing.Size(184, 21);
             this.txtLastTradingPrice.TabIndex = 36;
             // 
             // lblLastTradingPrice
@@ -503,19 +526,19 @@
             // 
             // txtStockID
             // 
-            this.txtStockID.Location = new System.Drawing.Point(188, 31);
+            this.txtStockID.Location = new System.Drawing.Point(170, 31);
             this.txtStockID.Margin = new System.Windows.Forms.Padding(2);
             this.txtStockID.Name = "txtStockID";
-            this.txtStockID.Size = new System.Drawing.Size(160, 21);
+            this.txtStockID.Size = new System.Drawing.Size(184, 21);
             this.txtStockID.TabIndex = 33;
             // 
             // txtCompanyName
             // 
             this.txtCompanyName.Enabled = false;
-            this.txtCompanyName.Location = new System.Drawing.Point(188, 60);
+            this.txtCompanyName.Location = new System.Drawing.Point(170, 60);
             this.txtCompanyName.Margin = new System.Windows.Forms.Padding(2);
             this.txtCompanyName.Name = "txtCompanyName";
-            this.txtCompanyName.Size = new System.Drawing.Size(160, 21);
+            this.txtCompanyName.Size = new System.Drawing.Size(184, 21);
             this.txtCompanyName.TabIndex = 34;
             // 
             // btnRetrieveStockInfo
@@ -528,24 +551,24 @@
             this.btnRetrieveStockInfo.UseVisualStyleBackColor = true;
             this.btnRetrieveStockInfo.Click += new System.EventHandler(this.btnRetrieveStockInfo_Click);
             // 
-            // lblDateOfInfo
+            // lblPERatio
             // 
-            this.lblDateOfInfo.AutoSize = true;
-            this.lblDateOfInfo.Location = new System.Drawing.Point(11, 91);
-            this.lblDateOfInfo.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblDateOfInfo.Name = "lblDateOfInfo";
-            this.lblDateOfInfo.Size = new System.Drawing.Size(83, 12);
-            this.lblDateOfInfo.TabIndex = 41;
-            this.lblDateOfInfo.Text = "Date of Info:";
+            this.lblPERatio.AutoSize = true;
+            this.lblPERatio.Location = new System.Drawing.Point(11, 191);
+            this.lblPERatio.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblPERatio.Name = "lblPERatio";
+            this.lblPERatio.Size = new System.Drawing.Size(59, 12);
+            this.lblPERatio.TabIndex = 42;
+            this.lblPERatio.Text = "PE Ratio:";
             // 
-            // txtDateOfInfo
+            // txtPERatio
             // 
-            this.txtDateOfInfo.Enabled = false;
-            this.txtDateOfInfo.Location = new System.Drawing.Point(188, 89);
-            this.txtDateOfInfo.Margin = new System.Windows.Forms.Padding(2);
-            this.txtDateOfInfo.Name = "txtDateOfInfo";
-            this.txtDateOfInfo.Size = new System.Drawing.Size(160, 21);
-            this.txtDateOfInfo.TabIndex = 40;
+            this.txtPERatio.Enabled = false;
+            this.txtPERatio.Location = new System.Drawing.Point(170, 189);
+            this.txtPERatio.Margin = new System.Windows.Forms.Padding(2);
+            this.txtPERatio.Name = "txtPERatio";
+            this.txtPERatio.Size = new System.Drawing.Size(184, 21);
+            this.txtPERatio.TabIndex = 43;
             // 
             // Form1
             // 
@@ -615,6 +638,8 @@
         private System.Windows.Forms.GroupBox groupBoxForStockInfo;
         private System.Windows.Forms.Label lblDateOfInfo;
         private System.Windows.Forms.TextBox txtDateOfInfo;
+        private System.Windows.Forms.Label lblPERatio;
+        private System.Windows.Forms.TextBox txtPERatio;
     }
 }
 

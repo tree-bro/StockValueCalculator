@@ -9,6 +9,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
 using HtmlAgilityPack;
+using System.Text.RegularExpressions;
 
 namespace StockValueCalculator
 {
@@ -49,6 +50,7 @@ namespace StockValueCalculator
         private string retrieveStockInfoFailedMessage = PromptMessages.retrieveStockInfoFailedMessageEN;
         private string parseCompanyDetailsFromServerSuccessMessage = PromptMessages.parseCompanyDetailsFromServerSuccessMessageEN;
         private string parseCompanyDetailsFromServerError = PromptMessages.parseCompanyDetailsFromServerErrorEN;
+        private string unknownStockIDMessage = PromptMessages.unknownStockIDMessageEN;
 
         public Form1()
         {
@@ -84,6 +86,7 @@ namespace StockValueCalculator
                 lblLastTradingPrice.Text = ConfigurationManager.AppSettings.Get("txtLastTradingPrice_zh");
                 lblCompanyProfitPerShare.Text = ConfigurationManager.AppSettings.Get("txtCompanyProfitPerShare_zh");
                 lblDateOfInfo.Text = ConfigurationManager.AppSettings.Get("txtDateOfInfo_zh");
+                lblPERatio.Text = ConfigurationManager.AppSettings.Get("txtPERatio_zh");
 
                 calculationPage.Text = ConfigurationManager.AppSettings.Get("tabCalculationPage_zh");
                 stockMarketPage.Text = ConfigurationManager.AppSettings.Get("tabStockMarketPage_zh");
@@ -96,6 +99,7 @@ namespace StockValueCalculator
                 retrieveStockInfoFailedMessage = PromptMessages.retrieveStockInfoFailedMessageZH;
                 parseCompanyDetailsFromServerSuccessMessage = PromptMessages.parseCompanyDetailsFromServerSuccessMessageZH;
                 parseCompanyDetailsFromServerError = PromptMessages.parseCompanyDetailsFromServerErrorZH;
+                unknownStockIDMessage = PromptMessages.unknownStockIDMessageZH;
             }
         }
 
@@ -270,12 +274,23 @@ namespace StockValueCalculator
                 txtProfitPerShare.Text = txtCompanyProfitPerShare.Text;
 
                 MessageBox.Show(parseCompanyDetailsFromServerSuccessMessage.Replace("[_STOCK_ID_]", txtStockID.Text.Trim()).Replace("[_COMPANY_NAME_]", txtCompanyName.Text.Trim()));
+                tabControl1.SelectTab(calculationPage);
+                resetStockInfoPageParameters();
             }
             else
             {
                 MessageBox.Show(parseCompanyDetailsFromServerError);
             }
             
+        }
+
+        private void resetStockInfoPageParameters()
+        {
+            txtCompanyName.Text = "";
+            txtDateOfInfo.Text = "";
+            txtLastTradingPrice.Text = "";
+            txtCompanyProfitPerShare.Text = "";
+            txtPERatio.Text = "";
         }
 
         private void Form1_DragDrop(object sender, DragEventArgs e)
@@ -285,44 +300,74 @@ namespace StockValueCalculator
 
         private void btnRetrieveStockInfo_Click(object sender, EventArgs e)
         {
-            string currDate = DateTime.Now.Date.ToString("yyyy-MM-dd");
-            string minus2date = DateTime.Now.Date.AddDays(-2).ToString("yyyy-MM-dd");
+            
             string stockID = txtStockID.Text.Trim();
-            string requestURL = URLTemplates.szseURLTemplateByID
-                                                                .Replace("[_STOCK_ID_]", stockID)
-                                                                .Replace("[_BEGIN_DATE_]", minus2date)
-                                                                .Replace("[_END_DATE_]", currDate);
 
-            HttpWebResponse response = (HttpWebResponse)WebRequest.Create(requestURL).GetResponse();
-            Encoding encoding = Encoding.GetEncoding("GBK");
+            StockMarketTypes marketType = Utils.checkMarketType(stockID);
 
-            using (StreamReader sr = new StreamReader(response.GetResponseStream(), encoding))
+            switch (marketType)
             {
-                HtmlAgilityPack.HtmlDocument htmlDocument = new HtmlAgilityPack.HtmlDocument();
-                htmlDocument.Load(sr);
-                HtmlNode tableNode = htmlDocument.GetElementbyId("REPORTID_tab1");
-                HtmlNodeCollection childNodes = tableNode.ChildNodes;
-                HtmlNodeCollection matchedStockInfoList = childNodes[1].ChildNodes;
-
-                if (childNodes.Count > 1 && matchedStockInfoList.Count > 1)
-                {
-                    // The retrieved stock info are located in descending order, so here just get the first one.
-                    // In SZ stock exchange market, the info are listed as TradingDate/StockID/CompanyName/PreviousClosePrice/TodayClosePrice/Percentage/Amount/PERatio
-                    txtCompanyName.Text = matchedStockInfoList[2].InnerText;
-                    txtDateOfInfo.Text = matchedStockInfoList[0].InnerText;
-                    txtLastTradingPrice.Text = matchedStockInfoList[4].InnerText;
-                    txtCompanyProfitPerShare.Text = Convert.ToString(decimal.Round(decimal.Parse(matchedStockInfoList[4].InnerText) / decimal.Parse(matchedStockInfoList[7].InnerText), 4));
-                    MessageBox.Show(retrieveStockInfoSuccessMessage);
-                }
-                else
-                {
-                    // If chile nodes only contains one row, it means no matched stock info found at this moment.
-                    MessageBox.Show(retrieveStockInfoFailedMessage);
-                }
-                
-            }
-
-            response.Close();
+                case StockMarketTypes.CHINA_SZ_EXCHANGE_MARKET:
+                    retrieveStockInfoByID("sz" + stockID);
+                    break;
+                case StockMarketTypes.CHINA_SH_EXCHANGE_MARKET:
+                    retrieveStockInfoByID("sh" + stockID);
+                    break;
+                case StockMarketTypes.UNKNOWN:
+                    MessageBox.Show(unknownStockIDMessage);
+                    break;
+            }                
+            
         }
+
+        private void retrieveStockInfoByID(string stockID)
+        {
+            string requestURL = URLTemplates.baiduTemplateByID.Replace("[_STOCK_ID_]", stockID);
+
+            HtmlAgilityPack.HtmlDocument htmlDocument = Utils.loadHtmlDocument(requestURL, Encoding.GetEncoding("utf-8"));
+
+            HtmlNode tableNode = htmlDocument.DocumentNode.SelectSingleNode("//div[@class='stock-bets']");
+
+            if(tableNode != null)
+            {
+                HtmlNode nameNode = tableNode.SelectSingleNode("//a[@class='bets-name']");
+                HtmlNode dateNode = tableNode.SelectSingleNode("//span[@class='state f-up']");
+                HtmlNode closePriceNode = tableNode.SelectSingleNode("//strong[@class='_close']");
+                HtmlNode detailNode = tableNode.SelectSingleNode("//div[@class='line1']");
+
+                txtCompanyName.Text = nameNode.InnerText.Trim();
+                txtLastTradingPrice.Text = closePriceNode.InnerText.Trim();
+                txtDateOfInfo.Text = dateNode.InnerText.Trim().Replace("&nbsp;","");
+                decimal companyProfitPerShare = decimal.Zero;
+                decimal peRatio = decimal.Zero;
+                decimal lastTradingPrice = decimal.Parse(closePriceNode.InnerText.Trim());
+                foreach (HtmlNode subNode in detailNode.ChildNodes)
+                {
+                    if (subNode.HasChildNodes)
+                    {
+                        if (subNode.FirstChild.InnerText.Equals("每股收益", StringComparison.CurrentCultureIgnoreCase))
+                        {
+                            companyProfitPerShare = decimal.Parse(subNode.LastChild.InnerText.Trim());
+                        }
+                        else if (subNode.FirstChild.InnerText.Contains("市盈率"))
+                        {
+                            txtPERatio.Text = subNode.LastChild.InnerText.Trim();
+                            peRatio = decimal.Parse(subNode.LastChild.InnerText.Trim());
+                        }
+                    }
+                }
+
+                // Recalculate the profit per share using PERatio and provided profit per share.
+                companyProfitPerShare = decimal.Round((lastTradingPrice / peRatio) * 2 - companyProfitPerShare, 4);
+                txtCompanyProfitPerShare.Text = Convert.ToString(companyProfitPerShare);
+
+                MessageBox.Show(retrieveStockInfoSuccessMessage);
+            } else
+            {
+                MessageBox.Show(retrieveStockInfoFailedMessage);
+            }
+            
+        }
+       
     }
 }

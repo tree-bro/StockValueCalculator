@@ -82,5 +82,11 @@ namespace StockValueCalculator
 
         public static string retrieveStockInfoFailedMessageZH =
             @"未能获取股票信息！请稍后再试。";
+
+        public static string unknownStockIDMessageEN =
+            @"The provided stock ID is unknown, please check and input again!";
+
+        public static string unknownStockIDMessageZH =
+            @"未知的股票代码!请查实后再输入一次！";
     }
 }
