@@ -347,18 +347,27 @@ namespace StockValueCalculator
                     {
                         if (subNode.FirstChild.InnerText.Equals("每股收益", StringComparison.CurrentCultureIgnoreCase))
                         {
-                            companyProfitPerShare = decimal.Parse(subNode.LastChild.InnerText.Trim());
+                            decimal.TryParse(subNode.LastChild.InnerText.Trim(), out companyProfitPerShare);
                         }
                         else if (subNode.FirstChild.InnerText.Contains("市盈率"))
                         {
                             txtPERatio.Text = subNode.LastChild.InnerText.Trim();
-                            peRatio = decimal.Parse(subNode.LastChild.InnerText.Trim());
+                            decimal.TryParse(subNode.LastChild.InnerText.Trim(), out peRatio);
                         }
                     }
                 }
 
                 // Recalculate the profit per share using PERatio and provided profit per share.
-                companyProfitPerShare = decimal.Round((lastTradingPrice / peRatio) * 2 - companyProfitPerShare, 4);
+                if(companyProfitPerShare > 0 && peRatio > 0)
+                {
+                    companyProfitPerShare = decimal.Round((lastTradingPrice / peRatio) * 2 - companyProfitPerShare, 4);
+                }
+                else if(peRatio > 0)
+                {
+                    companyProfitPerShare = decimal.Round(lastTradingPrice / peRatio, 4);
+                }
+
+                
                 txtCompanyProfitPerShare.Text = Convert.ToString(companyProfitPerShare);
 
                 MessageBox.Show(retrieveStockInfoSuccessMessage);
