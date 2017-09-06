@@ -6,3 +6,15 @@ E:\hx\source\StockValueCalculator\StockValueCalculator\bin\Debug\StockValueCalcu
 E:\hx\source\StockValueCalculator\StockValueCalculator\obj\Debug\StockValueCalculator.Form1.resources
 E:\hx\source\StockValueCalculator\StockValueCalculator\obj\Debug\StockValueCalculator.Properties.Resources.resources
 E:\hx\source\StockValueCalculator\StockValueCalculator\obj\Debug\StockValueCalculation.csproj.GenerateResource.Cache
+F:\hx\source\StockValueCalculator\StockValueCalculator\bin\Debug\StockValueCalculator.exe.config
+F:\hx\source\StockValueCalculator\StockValueCalculator\bin\Debug\StockValueCalculator.exe
+F:\hx\source\StockValueCalculator\StockValueCalculator\bin\Debug\StockValueCalculator.pdb
+F:\hx\source\StockValueCalculator\StockValueCalculator\obj\Debug\StockValueCalculator.Form1.resources
+F:\hx\source\StockValueCalculator\StockValueCalculator\obj\Debug\StockValueCalculator.Properties.Resources.resources
+F:\hx\source\StockValueCalculator\StockValueCalculator\obj\Debug\StockValueCalculation.csproj.GenerateResource.Cache
+F:\hx\source\StockValueCalculator\StockValueCalculator\obj\Debug\StockValueCalculation.csproj.CoreCompileInputs.cache
+F:\hx\source\StockValueCalculator\StockValueCalculator\obj\Debug\StockValueCalculator.exe
+F:\hx\source\StockValueCalculator\StockValueCalculator\obj\Debug\StockValueCalculator.pdb
+F:\hx\source\StockValueCalculator\StockValueCalculator\bin\Debug\HtmlAgilityPack.dll
+F:\hx\source\StockValueCalculator\StockValueCalculator\bin\Debug\HtmlAgilityPack.pdb
+F:\hx\source\StockValueCalculator\StockValueCalculator\bin\Debug\HtmlAgilityPack.xml

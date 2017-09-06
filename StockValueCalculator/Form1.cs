@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
 using System.IO;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using System.Xml;
+using HtmlAgilityPack;
 
 namespace StockValueCalculator
 {
@@ -41,6 +45,10 @@ namespace StockValueCalculator
         private string successMessage = PromptMessages.successMessageEN;
         private string parseCompanyDetailsFormatError = PromptMessages.parseCompanyDetailsFormatErrorEN;
         private string parseCompanyDetailsSuccessMessage = PromptMessages.parseCompanyDetailsSuccessMessageEN;
+        private string retrieveStockInfoSuccessMessage = PromptMessages.retrieveStockInfoSuccessMessageEN;
+        private string retrieveStockInfoFailedMessage = PromptMessages.retrieveStockInfoFailedMessageEN;
+        private string parseCompanyDetailsFromServerSuccessMessage = PromptMessages.parseCompanyDetailsFromServerSuccessMessageEN;
+        private string parseCompanyDetailsFromServerError = PromptMessages.parseCompanyDetailsFromServerErrorEN;
 
         public Form1()
         {
@@ -67,11 +75,27 @@ namespace StockValueCalculator
                 lblDepressionLossRate.Text = ConfigurationManager.AppSettings.Get("txtDepressionLossRate_zh");
                 lblStockHeldDuration.Text = ConfigurationManager.AppSettings.Get("txtStockHeldDuration_zh");
                 btnParseCompanyDetails.Text = ConfigurationManager.AppSettings.Get("btnParseCompanyDetails_zh");
+                btnParseCompanyDetailsFromServer.Text = ConfigurationManager.AppSettings.Get("btnParseCompanyDetailsFromServer_zh");
                 btnCalculate.Text = ConfigurationManager.AppSettings.Get("btnCalculate_zh");
+                btnRetrieveStockInfo.Text = ConfigurationManager.AppSettings.Get("btnRefreshStockList_zh");
+
+                lblSelectedStockID.Text = ConfigurationManager.AppSettings.Get("txtStockID_zh");
+                lblCompanyName.Text = ConfigurationManager.AppSettings.Get("txtCompanyName_zh");
+                lblLastTradingPrice.Text = ConfigurationManager.AppSettings.Get("txtLastTradingPrice_zh");
+                lblCompanyProfitPerShare.Text = ConfigurationManager.AppSettings.Get("txtCompanyProfitPerShare_zh");
+                lblDateOfInfo.Text = ConfigurationManager.AppSettings.Get("txtDateOfInfo_zh");
+
+                calculationPage.Text = ConfigurationManager.AppSettings.Get("tabCalculationPage_zh");
+                stockMarketPage.Text = ConfigurationManager.AppSettings.Get("tabStockMarketPage_zh");
+                groupBoxForStockInfo.Text = ConfigurationManager.AppSettings.Get("groupStockInfo_zh");
 
                 successMessage = PromptMessages.successMessageZH;
                 parseCompanyDetailsFormatError = PromptMessages.parseCompanyDetailsFormatErrorZH;
                 parseCompanyDetailsSuccessMessage = PromptMessages.parseCompanyDetailsSuccessMessageZH;
+                retrieveStockInfoSuccessMessage = PromptMessages.retrieveStockInfoSuccessMessageZH;
+                retrieveStockInfoFailedMessage = PromptMessages.retrieveStockInfoFailedMessageZH;
+                parseCompanyDetailsFromServerSuccessMessage = PromptMessages.parseCompanyDetailsFromServerSuccessMessageZH;
+                parseCompanyDetailsFromServerError = PromptMessages.parseCompanyDetailsFromServerErrorZH;
             }
         }
 
@@ -115,6 +139,7 @@ namespace StockValueCalculator
             totalSellTax = totalSellTax + resultForSell * currentInterest * tradingTaxRate;
 
             string displaySuccessMessage = successMessage
+                                                .Replace("[_MARKET_PRICE_]", Convert.ToString(decimal.Round(marketPrice, 5)))
                                                 .Replace("[_INNER_VALUE_DEDUCT_PROFIT_SHARING_]", Convert.ToString(decimal.Round(totalInnerValue, 5)))
                                                 .Replace("[_PROFIT_SHARING_]", Convert.ToString(decimal.Round(totalProfitSharing, 5)))
                                                 .Replace("[_TRADING_TAX_PAID_]", Convert.ToString(decimal.Round(totalTradingTaxPaid, 5)))
@@ -235,6 +260,69 @@ namespace StockValueCalculator
             }
 
             MessageBox.Show(parseCompanyDetailsSuccessMessage.Replace("[_FILE_PATH_]", selectedFilePath));
+        }
+
+        private void btnParseCompanyDetailsFromServer_Click(object sender, EventArgs e)
+        {
+            if (!txtCompanyName.Text.Trim().Equals(""))
+            {
+                txtMarketPrice.Text = txtLastTradingPrice.Text;
+                txtProfitPerShare.Text = txtCompanyProfitPerShare.Text;
+
+                MessageBox.Show(parseCompanyDetailsFromServerSuccessMessage.Replace("[_STOCK_ID_]", txtStockID.Text.Trim()).Replace("[_COMPANY_NAME_]", txtCompanyName.Text.Trim()));
+            }
+            else
+            {
+                MessageBox.Show(parseCompanyDetailsFromServerError);
+            }
+            
+        }
+
+        private void Form1_DragDrop(object sender, DragEventArgs e)
+        {
+            
+        }
+
+        private void btnRetrieveStockInfo_Click(object sender, EventArgs e)
+        {
+            string currDate = DateTime.Now.Date.ToString("yyyy-MM-dd");
+            string minus2date = DateTime.Now.Date.AddDays(-2).ToString("yyyy-MM-dd");
+            string stockID = txtStockID.Text.Trim();
+            string requestURL = URLTemplates.szseURLTemplateByID
+                                                                .Replace("[_STOCK_ID_]", stockID)
+                                                                .Replace("[_BEGIN_DATE_]", minus2date)
+                                                                .Replace("[_END_DATE_]", currDate);
+
+            HttpWebResponse response = (HttpWebResponse)WebRequest.Create(requestURL).GetResponse();
+            Encoding encoding = Encoding.GetEncoding("GBK");
+
+            using (StreamReader sr = new StreamReader(response.GetResponseStream(), encoding))
+            {
+                HtmlAgilityPack.HtmlDocument htmlDocument = new HtmlAgilityPack.HtmlDocument();
+                htmlDocument.Load(sr);
+                HtmlNode tableNode = htmlDocument.GetElementbyId("REPORTID_tab1");
+                HtmlNodeCollection childNodes = tableNode.ChildNodes;
+                HtmlNodeCollection matchedStockInfoList = childNodes[1].ChildNodes;
+
+                if (childNodes.Count > 1 && matchedStockInfoList.Count > 1)
+                {
+                    // The retrieved stock info are located in descending order, so here just get the first one.
+                    // In SZ stock exchange market, the info are listed as TradingDate/StockID/CompanyName/PreviousClosePrice/TodayClosePrice/Percentage/Amount/PERatio
+                    txtCompanyName.Text = matchedStockInfoList[2].InnerText;
+                    txtDateOfInfo.Text = matchedStockInfoList[0].InnerText;
+                    txtLastTradingPrice.Text = matchedStockInfoList[4].InnerText;
+                    txtCompanyProfitPerShare.Text = Convert.ToString(decimal.Round(decimal.Parse(matchedStockInfoList[4].InnerText) / decimal.Parse(matchedStockInfoList[7].InnerText), 4));
+                    MessageBox.Show(retrieveStockInfoSuccessMessage);
+                }
+                else
+                {
+                    // If chile nodes only contains one row, it means no matched stock info found at this moment.
+                    MessageBox.Show(retrieveStockInfoFailedMessage);
+                }
+                
+            }
+
+            response.Close();
         }
     }
 }
