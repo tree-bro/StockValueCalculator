@@ -56,6 +56,7 @@ namespace StockValueCalculator
         {
             InitializeComponent();
             setLanguagePreference();
+            setCalculationInitValues();
         }
 
         private void setLanguagePreference()
@@ -63,30 +64,30 @@ namespace StockValueCalculator
             CultureInfo info = Thread.CurrentThread.CurrentUICulture;
             if (info.Name.Equals("zh-cn", StringComparison.CurrentCultureIgnoreCase))
             {
-                lblMarketPrice.Text = ConfigurationManager.AppSettings.Get("txtMarketPrice_zh");
-                lblTradeTaxRate.Text = ConfigurationManager.AppSettings.Get("txtTradingTaxRate_zh");
-                lblProfitPerShare.Text = ConfigurationManager.AppSettings.Get("txtProfitPerShare_zh");
-                lblProfitSharingRate.Text = ConfigurationManager.AppSettings.Get("txtProfitSharingRate_zh");
-                lblCompanyDuration.Text = ConfigurationManager.AppSettings.Get("txtCompanyDuration_zh");
-                lblDiscountRate.Text = ConfigurationManager.AppSettings.Get("txtDiscountRate_zh");
-                lblNormalGrowthRate.Text = ConfigurationManager.AppSettings.Get("txtNormalGrowthRate_zh");
-                lblHighSpeedGrowthRate.Text = ConfigurationManager.AppSettings.Get("txtHighSpeedGrowthRate_zh");
-                lblHighSpeedGrowthDuration.Text = ConfigurationManager.AppSettings.Get("txtHighSpeedGrowthDuration_zh");
-                lblProfitSharingTax.Text = ConfigurationManager.AppSettings.Get("txtProfitSharingTaxRate_zh");
-                lblDepressionFrequency.Text = ConfigurationManager.AppSettings.Get("txtDepressionFrequency_zh");
-                lblDepressionLossRate.Text = ConfigurationManager.AppSettings.Get("txtDepressionLossRate_zh");
-                lblStockHeldDuration.Text = ConfigurationManager.AppSettings.Get("txtStockHeldDuration_zh");
+                lblMarketPrice.Text = ConfigurationManager.AppSettings.Get("lblMarketPrice_zh");
+                lblTradeTaxRate.Text = ConfigurationManager.AppSettings.Get("lblTradingTaxRate_zh");
+                lblProfitPerShare.Text = ConfigurationManager.AppSettings.Get("lblProfitPerShare_zh");
+                lblProfitSharingRate.Text = ConfigurationManager.AppSettings.Get("lblProfitSharingRate_zh");
+                lblCompanyDuration.Text = ConfigurationManager.AppSettings.Get("lblCompanyDuration_zh");
+                lblDiscountRate.Text = ConfigurationManager.AppSettings.Get("lblDiscountRate_zh");
+                lblNormalGrowthRate.Text = ConfigurationManager.AppSettings.Get("lblNormalGrowthRate_zh");
+                lblHighSpeedGrowthRate.Text = ConfigurationManager.AppSettings.Get("lblHighSpeedGrowthRate_zh");
+                lblHighSpeedGrowthDuration.Text = ConfigurationManager.AppSettings.Get("lblHighSpeedGrowthDuration_zh");
+                lblProfitSharingTax.Text = ConfigurationManager.AppSettings.Get("lblProfitSharingTaxRate_zh");
+                lblDepressionFrequency.Text = ConfigurationManager.AppSettings.Get("lblDepressionFrequency_zh");
+                lblDepressionLossRate.Text = ConfigurationManager.AppSettings.Get("lblDepressionLossRate_zh");
+                lblStockHeldDuration.Text = ConfigurationManager.AppSettings.Get("lblStockHeldDuration_zh");
                 btnParseCompanyDetails.Text = ConfigurationManager.AppSettings.Get("btnParseCompanyDetails_zh");
                 btnParseCompanyDetailsFromServer.Text = ConfigurationManager.AppSettings.Get("btnParseCompanyDetailsFromServer_zh");
                 btnCalculate.Text = ConfigurationManager.AppSettings.Get("btnCalculate_zh");
                 btnRetrieveStockInfo.Text = ConfigurationManager.AppSettings.Get("btnRefreshStockList_zh");
 
-                lblSelectedStockID.Text = ConfigurationManager.AppSettings.Get("txtStockID_zh");
-                lblCompanyName.Text = ConfigurationManager.AppSettings.Get("txtCompanyName_zh");
-                lblLastTradingPrice.Text = ConfigurationManager.AppSettings.Get("txtLastTradingPrice_zh");
-                lblCompanyProfitPerShare.Text = ConfigurationManager.AppSettings.Get("txtCompanyProfitPerShare_zh");
-                lblDateOfInfo.Text = ConfigurationManager.AppSettings.Get("txtDateOfInfo_zh");
-                lblPERatio.Text = ConfigurationManager.AppSettings.Get("txtPERatio_zh");
+                lblSelectedStockID.Text = ConfigurationManager.AppSettings.Get("lblStockID_zh");
+                lblCompanyName.Text = ConfigurationManager.AppSettings.Get("lblCompanyName_zh");
+                lblLastTradingPrice.Text = ConfigurationManager.AppSettings.Get("lblLastTradingPrice_zh");
+                lblCompanyProfitPerShare.Text = ConfigurationManager.AppSettings.Get("lblCompanyProfitPerShare_zh");
+                lblDateOfInfo.Text = ConfigurationManager.AppSettings.Get("lblDateOfInfo_zh");
+                lblPERatio.Text = ConfigurationManager.AppSettings.Get("lblPERatio_zh");
 
                 calculationPage.Text = ConfigurationManager.AppSettings.Get("tabCalculationPage_zh");
                 stockMarketPage.Text = ConfigurationManager.AppSettings.Get("tabStockMarketPage_zh");
@@ -101,6 +102,23 @@ namespace StockValueCalculator
                 parseCompanyDetailsFromServerError = PromptMessages.parseCompanyDetailsFromServerErrorZH;
                 unknownStockIDMessage = PromptMessages.unknownStockIDMessageZH;
             }
+        }
+
+        private void setCalculationInitValues()
+        {
+            txtMarketPrice.Text = ConfigurationManager.AppSettings.Get("initValueMarketPrice");
+            txtTradeTaxRate.Text = ConfigurationManager.AppSettings.Get("initValueTradingTaxRate");
+            txtProfitPerShare.Text = ConfigurationManager.AppSettings.Get("initValueProfitPerShare");
+            txtProfitSharingRate.Text = ConfigurationManager.AppSettings.Get("initValueProfitSharingRate");
+            txtCompanyDuration.Text = ConfigurationManager.AppSettings.Get("initValueCompanyDuration");
+            txtDiscountRate.Text = ConfigurationManager.AppSettings.Get("initValueDiscountRate");
+            txtNormalGrowthRate.Text = ConfigurationManager.AppSettings.Get("initValueNormalGrowthRate");
+            txtHighSpeedGrowthRate.Text = ConfigurationManager.AppSettings.Get("initValueHighSpeedGrowthRate");
+            txtHighSpeedGrowthDuration.Text = ConfigurationManager.AppSettings.Get("initValueHighSpeedGrowthDuration");
+            txtProfitSharingTax.Text = ConfigurationManager.AppSettings.Get("initValueProfitSharingTaxRate");
+            txtDepressionFrequency.Text = ConfigurationManager.AppSettings.Get("initValueDepressionFrequency");
+            txtDepressionLossRate.Text = ConfigurationManager.AppSettings.Get("initValueDepressionLossRate");
+            txtStockHeldDuration.Text = ConfigurationManager.AppSettings.Get("initValueStockHeldDuration");
         }
 
         private void btnCalculate_Click(object sender, EventArgs e)
@@ -170,19 +188,26 @@ namespace StockValueCalculator
 
         private void parseInputParameters()
         {
-            marketPrice = decimal.Parse(txtMarketPrice.Text.Trim());
-            tradingTaxRate = decimal.Parse(txtTradeTaxRate.Text.Trim()) / 100M;
-            profitPerShare = decimal.Parse(txtProfitPerShare.Text.Trim());
-            profitSharingRate = decimal.Parse(txtProfitSharingRate.Text.Trim()) / 100M;
-            companyDuration = short.Parse(txtCompanyDuration.Text.Trim());
-            discountRate = decimal.Parse(txtDiscountRate.Text.Trim()) / 100M;
-            normalGrowthRate = decimal.Parse(txtNormalGrowthRate.Text.Trim()) / 100M;
-            highSpeedGrowthRate = decimal.Parse(txtHighSpeedGrowthRate.Text.Trim()) / 100M;
-            highSpeedGrwothDuration = short.Parse(txtHighSpeedGrowthDuration.Text.Trim());
-            profitSharingTaxRate = decimal.Parse(txtProfitSharingTax.Text.Trim()) / 100M;
-            depressionFrequency = short.Parse(txtDepressionFrequency.Text.Trim());
-            depressionLossRate = decimal.Parse(txtDepressionLossRate.Text.Trim()) / 100M;
-            stockHeldDuration = short.Parse(txtStockHeldDuration.Text.Trim());
+            decimal.TryParse(txtMarketPrice.Text.Trim(), out marketPrice);
+            decimal.TryParse(txtTradeTaxRate.Text.Trim(), out tradingTaxRate);
+            tradingTaxRate = tradingTaxRate / 100M;
+            decimal.TryParse(txtProfitPerShare.Text.Trim(), out profitPerShare);
+            decimal.TryParse(txtProfitSharingRate.Text.Trim(), out profitSharingRate);
+            profitSharingRate = profitSharingRate / 100M;
+            short.TryParse(txtCompanyDuration.Text.Trim(), out companyDuration);
+            decimal.TryParse(txtDiscountRate.Text.Trim(), out discountRate);
+            discountRate = discountRate / 100M;
+            decimal.TryParse(txtNormalGrowthRate.Text.Trim(), out normalGrowthRate);
+            normalGrowthRate = normalGrowthRate / 100M;
+            decimal.TryParse(txtHighSpeedGrowthRate.Text.Trim(), out highSpeedGrowthRate);
+            highSpeedGrowthRate = highSpeedGrowthRate / 100M;
+            short.TryParse(txtHighSpeedGrowthDuration.Text.Trim(), out highSpeedGrwothDuration);
+            decimal.TryParse(txtProfitSharingTax.Text.Trim(), out profitSharingTaxRate);
+            profitSharingTaxRate = profitSharingTaxRate / 100M;
+            short.TryParse(txtDepressionFrequency.Text.Trim(), out depressionFrequency);
+            decimal.TryParse(txtDepressionLossRate.Text.Trim(), out depressionLossRate);
+            depressionLossRate = depressionLossRate / 100M;
+            short.TryParse(txtStockHeldDuration.Text.Trim(), out stockHeldDuration);
         }
 
         private void parseInputParametersFromFile(string line)
@@ -340,7 +365,8 @@ namespace StockValueCalculator
                 txtDateOfInfo.Text = dateNode.InnerText.Trim().Replace("&nbsp;","");
                 decimal companyProfitPerShare = decimal.Zero;
                 decimal peRatio = decimal.Zero;
-                decimal lastTradingPrice = decimal.Parse(closePriceNode.InnerText.Trim());
+                decimal lastTradingPrice = decimal.Zero;
+                decimal.TryParse(closePriceNode.InnerText.Trim(), out lastTradingPrice);
                 foreach (HtmlNode subNode in detailNode.ChildNodes)
                 {
                     if (subNode.HasChildNodes)

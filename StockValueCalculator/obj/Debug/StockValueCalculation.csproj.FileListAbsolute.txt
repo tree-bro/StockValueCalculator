@@ -18,4 +18,3 @@ F:\hx\source\StockValueCalculator\StockValueCalculator\obj\Debug\StockValueCalcu
 F:\hx\source\StockValueCalculator\StockValueCalculator\bin\Debug\HtmlAgilityPack.dll
 F:\hx\source\StockValueCalculator\StockValueCalculator\bin\Debug\HtmlAgilityPack.pdb
 F:\hx\source\StockValueCalculator\StockValueCalculator\bin\Debug\HtmlAgilityPack.xml
-F:\hx\source\StockValueCalculator\StockValueCalculator\obj\Debug\StockValueCalculation.csprojResolveAssemblyReference.cache
