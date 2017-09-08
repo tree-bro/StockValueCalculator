@@ -338,6 +338,9 @@ namespace StockValueCalculator
                 case StockMarketTypes.CHINA_SH_EXCHANGE_MARKET:
                     retrieveStockInfoByID("sh" + stockID);
                     break;
+                case StockMarketTypes.HK_EXCHANGE_MARKET:
+                    retrieveStockInfoByID("hk" + stockID);
+                    break;
                 case StockMarketTypes.UNKNOWN:
                     MessageBox.Show(unknownStockIDMessage);
                     break;
@@ -358,7 +361,7 @@ namespace StockValueCalculator
                 HtmlNode nameNode = tableNode.SelectSingleNode("//a[@class='bets-name']");
                 HtmlNode dateNode = tableNode.SelectSingleNode("//span[@class='state f-up']");
                 HtmlNode closePriceNode = tableNode.SelectSingleNode("//strong[@class='_close']");
-                HtmlNode detailNode = tableNode.SelectSingleNode("//div[@class='line1']");
+                HtmlNode detailNode = tableNode.SelectSingleNode("//div[@class='bets-content']//div");
 
                 txtCompanyName.Text = nameNode.InnerText.Trim();
                 txtLastTradingPrice.Text = closePriceNode.InnerText.Trim();

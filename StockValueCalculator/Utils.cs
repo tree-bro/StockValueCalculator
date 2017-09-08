@@ -30,6 +30,7 @@ namespace StockValueCalculator
         {
             Regex regexForChinaSZ = new Regex("^00[0-9]{4}$");
             Regex regexForChinaSH = new Regex("^60[0-9]{4}$");
+            Regex regexForHK = new Regex("^0[0-9]{4}$");
 
             if (regexForChinaSZ.IsMatch(stockID))
             {
@@ -38,6 +39,10 @@ namespace StockValueCalculator
             else if (regexForChinaSH.IsMatch(stockID))
             {
                 return StockMarketTypes.CHINA_SH_EXCHANGE_MARKET;
+            }
+            else if (regexForHK.IsMatch(stockID))
+            {
+                return StockMarketTypes.HK_EXCHANGE_MARKET;
             }
             else
             {
