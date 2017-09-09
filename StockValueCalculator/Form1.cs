@@ -386,14 +386,15 @@ namespace StockValueCalculator
                     }
                 }
 
-                // Recalculate the profit per share using PERatio and provided profit per share.
-                if(companyProfitPerShare > 0 && peRatio > 0)
+                // Recalculate the profit per share by the past days.
+                // Always use PERatio for bellow calculation if available.
+                if(peRatio > 0)
                 {
-                    companyProfitPerShare = decimal.Round((lastTradingPrice / peRatio) * 2 - companyProfitPerShare, 4);
+                    companyProfitPerShare = decimal.Round(lastTradingPrice / peRatio * 365M / DateTime.Today.DayOfYear, 4);
                 }
-                else if(peRatio > 0)
+                else if(companyProfitPerShare > 0)
                 {
-                    companyProfitPerShare = decimal.Round(lastTradingPrice / peRatio, 4);
+                    companyProfitPerShare = decimal.Round(companyProfitPerShare * 365M / DateTime.Today.DayOfYear, 4);
                 }
 
                 
