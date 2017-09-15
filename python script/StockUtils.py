@@ -63,11 +63,11 @@ class ResponseHtmlParser(HTMLParser):
 
 	def handle_data(self,data):
 		if(self.parseNameNode):
-			self.nameNodeText = data
+			self.nameNodeText += data
 		elif(self.parseDateNode):
-			self.dateNodeText = data
+			self.dateNodeText += data
 		elif(self.parseClosePriceNode):
-			self.closePriceNodeText = data
+			self.closePriceNodeText += data
 		elif(self.parseDetailNode):
 			if (data == '市盈率'):
 				self.parsePERatioNode = True
@@ -77,10 +77,10 @@ class ResponseHtmlParser(HTMLParser):
 				if (self.peRatioContentCount < 1):
 					self.peRatioContentCount += 1
 				else:
-					self.peRatioNodeText = data
+					self.peRatioNodeText += data
 					self.parsePERatioNode = False
 			elif (self.parseProfitPerSharingNode):
-				self.profitPerSharingNodeText = data
+				self.profitPerSharingNodeText += data
 				self.parseProfitPerSharingNode = False
 
 def constructURL(stockID):
