@@ -60,10 +60,10 @@ namespace StockValueCalculator
             @"成功从下列文件中获取公司资料 [[_FILE_PATH_]]!";
 
         public static string parseCompanyDetailsFromServerSuccessMessageEN =
-            @"Successfully parsed company details [[_STOCK_ID_] [_COMPANY_NAME_]]!";
+            @"Successfully parsed company details [[_COMPANY_NAME_]]!";
 
         public static string parseCompanyDetailsFromServerSuccessMessageZH =
-            @"成功从服务器获取公司资料 [[_STOCK_ID_] [_COMPANY_NAME_]]!";
+            @"成功从服务器获取公司资料 [[_COMPANY_NAME_]]!";
 
         public static string parseCompanyDetailsFromServerErrorEN =
             @"Please retrieve the company info before parsing company details!";

@@ -92,6 +92,8 @@ namespace StockValueCalculator
                 calculationPage.Text = ConfigurationManager.AppSettings.Get("tabCalculationPage_zh");
                 stockMarketPage.Text = ConfigurationManager.AppSettings.Get("tabStockMarketPage_zh");
                 groupBoxForStockInfo.Text = ConfigurationManager.AppSettings.Get("groupStockInfo_zh");
+                groupBoxForServerParseParams.Text = ConfigurationManager.AppSettings.Get("groupBoxForServerParseParams_zh");
+                groupBoxForManualInputParams.Text = ConfigurationManager.AppSettings.Get("groupBoxForManualInputParams_zh");
 
                 successMessage = PromptMessages.successMessageZH;
                 parseCompanyDetailsFormatError = PromptMessages.parseCompanyDetailsFormatErrorZH;
@@ -277,18 +279,23 @@ namespace StockValueCalculator
             openFileDialogForCompanyDetails.ShowDialog();
             string selectedFilePath = openFileDialogForCompanyDetails.FileName;
 
-            if (!selectedFilePath.EndsWith(".csv"))
+            this.parseCompanyDetailsFromFile(selectedFilePath);
+        }
+
+        private void parseCompanyDetailsFromFile(string filePath)
+        {
+            if (!filePath.EndsWith(".csv"))
             {
                 MessageBox.Show(parseCompanyDetailsFormatError, "File Format Error");
                 return;
             }
 
-            foreach(string line in File.ReadAllLines(selectedFilePath))
+            foreach (string line in File.ReadAllLines(filePath))
             {
                 parseInputParametersFromFile(line);
             }
 
-            MessageBox.Show(parseCompanyDetailsSuccessMessage.Replace("[_FILE_PATH_]", selectedFilePath));
+            MessageBox.Show(parseCompanyDetailsSuccessMessage.Replace("[_FILE_PATH_]", filePath));
         }
 
         private void btnParseCompanyDetailsFromServer_Click(object sender, EventArgs e)
@@ -298,7 +305,8 @@ namespace StockValueCalculator
                 txtMarketPrice.Text = txtLastTradingPrice.Text;
                 txtProfitPerShare.Text = txtCompanyProfitPerShare.Text;
 
-                MessageBox.Show(parseCompanyDetailsFromServerSuccessMessage.Replace("[_STOCK_ID_]", txtStockID.Text.Trim()).Replace("[_COMPANY_NAME_]", txtCompanyName.Text.Trim()));
+                MessageBox.Show(parseCompanyDetailsFromServerSuccessMessage.Replace("[_COMPANY_NAME_]", txtCompanyName.Text.Trim()));
+
                 tabControl1.SelectTab(calculationPage);
                 resetStockInfoPageParameters();
             }
@@ -318,10 +326,7 @@ namespace StockValueCalculator
             txtPERatio.Text = "";
         }
 
-        private void Form1_DragDrop(object sender, DragEventArgs e)
-        {
-            
-        }
+
 
         private void btnRetrieveStockInfo_Click(object sender, EventArgs e)
         {
@@ -407,6 +412,36 @@ namespace StockValueCalculator
             }
             
         }
-       
+
+        private void tabControl1_DragDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                if(tabControl1.SelectedTab == calculationPage)
+                {
+                    string[] fileNames = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+                    foreach (string fileName in fileNames)
+                    {
+                        this.parseCompanyDetailsFromFile(fileName);
+                    }
+                }
+                else if(tabControl1.SelectedTab == stockMarketPage)
+                {
+
+                }
+            }
+        }
+
+        private void tabControl1_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effect = DragDropEffects.All;
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
+        }
     }
 }

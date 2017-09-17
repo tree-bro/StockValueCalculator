@@ -60,8 +60,12 @@
             this.btnParseCompanyDetailsFromServer = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.calculationPage = new System.Windows.Forms.TabPage();
+            this.groupBoxForManualInputParams = new System.Windows.Forms.GroupBox();
+            this.groupBoxForServerParseParams = new System.Windows.Forms.GroupBox();
             this.stockMarketPage = new System.Windows.Forms.TabPage();
             this.groupBoxForStockInfo = new System.Windows.Forms.GroupBox();
+            this.lblPERatio = new System.Windows.Forms.Label();
+            this.txtPERatio = new System.Windows.Forms.TextBox();
             this.lblDateOfInfo = new System.Windows.Forms.Label();
             this.txtDateOfInfo = new System.Windows.Forms.TextBox();
             this.lblSelectedStockID = new System.Windows.Forms.Label();
@@ -73,10 +77,10 @@
             this.txtStockID = new System.Windows.Forms.TextBox();
             this.txtCompanyName = new System.Windows.Forms.TextBox();
             this.btnRetrieveStockInfo = new System.Windows.Forms.Button();
-            this.lblPERatio = new System.Windows.Forms.Label();
-            this.txtPERatio = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.calculationPage.SuspendLayout();
+            this.groupBoxForManualInputParams.SuspendLayout();
+            this.groupBoxForServerParseParams.SuspendLayout();
             this.stockMarketPage.SuspendLayout();
             this.groupBoxForStockInfo.SuspendLayout();
             this.SuspendLayout();
@@ -84,7 +88,7 @@
             // lblMarketPrice
             // 
             this.lblMarketPrice.AutoSize = true;
-            this.lblMarketPrice.Location = new System.Drawing.Point(15, 25);
+            this.lblMarketPrice.Location = new System.Drawing.Point(5, 25);
             this.lblMarketPrice.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblMarketPrice.Name = "lblMarketPrice";
             this.lblMarketPrice.Size = new System.Drawing.Size(89, 12);
@@ -93,7 +97,7 @@
             // 
             // txtMarketPrice
             // 
-            this.txtMarketPrice.Location = new System.Drawing.Point(192, 23);
+            this.txtMarketPrice.Location = new System.Drawing.Point(182, 23);
             this.txtMarketPrice.Margin = new System.Windows.Forms.Padding(2);
             this.txtMarketPrice.Name = "txtMarketPrice";
             this.txtMarketPrice.Size = new System.Drawing.Size(160, 21);
@@ -102,7 +106,7 @@
             // 
             // txtTradeTaxRate
             // 
-            this.txtTradeTaxRate.Location = new System.Drawing.Point(192, 52);
+            this.txtTradeTaxRate.Location = new System.Drawing.Point(182, 24);
             this.txtTradeTaxRate.Margin = new System.Windows.Forms.Padding(2);
             this.txtTradeTaxRate.Name = "txtTradeTaxRate";
             this.txtTradeTaxRate.Size = new System.Drawing.Size(160, 21);
@@ -111,7 +115,7 @@
             // 
             // txtProfitPerShare
             // 
-            this.txtProfitPerShare.Location = new System.Drawing.Point(192, 81);
+            this.txtProfitPerShare.Location = new System.Drawing.Point(182, 54);
             this.txtProfitPerShare.Margin = new System.Windows.Forms.Padding(2);
             this.txtProfitPerShare.Name = "txtProfitPerShare";
             this.txtProfitPerShare.Size = new System.Drawing.Size(160, 21);
@@ -121,7 +125,7 @@
             // lblProfitPerShare
             // 
             this.lblProfitPerShare.AutoSize = true;
-            this.lblProfitPerShare.Location = new System.Drawing.Point(15, 83);
+            this.lblProfitPerShare.Location = new System.Drawing.Point(5, 56);
             this.lblProfitPerShare.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblProfitPerShare.Name = "lblProfitPerShare";
             this.lblProfitPerShare.Size = new System.Drawing.Size(113, 12);
@@ -130,7 +134,7 @@
             // 
             // txtCompanyDuration
             // 
-            this.txtCompanyDuration.Location = new System.Drawing.Point(192, 142);
+            this.txtCompanyDuration.Location = new System.Drawing.Point(182, 84);
             this.txtCompanyDuration.Margin = new System.Windows.Forms.Padding(2);
             this.txtCompanyDuration.Name = "txtCompanyDuration";
             this.txtCompanyDuration.Size = new System.Drawing.Size(160, 21);
@@ -140,7 +144,7 @@
             // lblCompanyDuration
             // 
             this.lblCompanyDuration.AutoSize = true;
-            this.lblCompanyDuration.Location = new System.Drawing.Point(15, 145);
+            this.lblCompanyDuration.Location = new System.Drawing.Point(5, 87);
             this.lblCompanyDuration.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblCompanyDuration.Name = "lblCompanyDuration";
             this.lblCompanyDuration.Size = new System.Drawing.Size(155, 12);
@@ -149,7 +153,7 @@
             // 
             // txtDiscountRate
             // 
-            this.txtDiscountRate.Location = new System.Drawing.Point(192, 172);
+            this.txtDiscountRate.Location = new System.Drawing.Point(182, 114);
             this.txtDiscountRate.Margin = new System.Windows.Forms.Padding(2);
             this.txtDiscountRate.Name = "txtDiscountRate";
             this.txtDiscountRate.Size = new System.Drawing.Size(160, 21);
@@ -159,7 +163,7 @@
             // lblDiscountRate
             // 
             this.lblDiscountRate.AutoSize = true;
-            this.lblDiscountRate.Location = new System.Drawing.Point(15, 174);
+            this.lblDiscountRate.Location = new System.Drawing.Point(5, 116);
             this.lblDiscountRate.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblDiscountRate.Name = "lblDiscountRate";
             this.lblDiscountRate.Size = new System.Drawing.Size(107, 12);
@@ -168,7 +172,7 @@
             // 
             // txtNormalGrowthRate
             // 
-            this.txtNormalGrowthRate.Location = new System.Drawing.Point(192, 200);
+            this.txtNormalGrowthRate.Location = new System.Drawing.Point(182, 142);
             this.txtNormalGrowthRate.Margin = new System.Windows.Forms.Padding(2);
             this.txtNormalGrowthRate.Name = "txtNormalGrowthRate";
             this.txtNormalGrowthRate.Size = new System.Drawing.Size(160, 21);
@@ -178,7 +182,7 @@
             // lblNormalGrowthRate
             // 
             this.lblNormalGrowthRate.AutoSize = true;
-            this.lblNormalGrowthRate.Location = new System.Drawing.Point(15, 202);
+            this.lblNormalGrowthRate.Location = new System.Drawing.Point(5, 144);
             this.lblNormalGrowthRate.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblNormalGrowthRate.Name = "lblNormalGrowthRate";
             this.lblNormalGrowthRate.Size = new System.Drawing.Size(137, 12);
@@ -187,7 +191,7 @@
             // 
             // txtHighSpeedGrowthRate
             // 
-            this.txtHighSpeedGrowthRate.Location = new System.Drawing.Point(192, 229);
+            this.txtHighSpeedGrowthRate.Location = new System.Drawing.Point(182, 171);
             this.txtHighSpeedGrowthRate.Margin = new System.Windows.Forms.Padding(2);
             this.txtHighSpeedGrowthRate.Name = "txtHighSpeedGrowthRate";
             this.txtHighSpeedGrowthRate.Size = new System.Drawing.Size(160, 21);
@@ -197,7 +201,7 @@
             // lblHighSpeedGrowthRate
             // 
             this.lblHighSpeedGrowthRate.AutoSize = true;
-            this.lblHighSpeedGrowthRate.Location = new System.Drawing.Point(15, 232);
+            this.lblHighSpeedGrowthRate.Location = new System.Drawing.Point(5, 174);
             this.lblHighSpeedGrowthRate.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblHighSpeedGrowthRate.Name = "lblHighSpeedGrowthRate";
             this.lblHighSpeedGrowthRate.Size = new System.Drawing.Size(161, 12);
@@ -206,7 +210,7 @@
             // 
             // txtHighSpeedGrowthDuration
             // 
-            this.txtHighSpeedGrowthDuration.Location = new System.Drawing.Point(192, 261);
+            this.txtHighSpeedGrowthDuration.Location = new System.Drawing.Point(182, 203);
             this.txtHighSpeedGrowthDuration.Margin = new System.Windows.Forms.Padding(2);
             this.txtHighSpeedGrowthDuration.Name = "txtHighSpeedGrowthDuration";
             this.txtHighSpeedGrowthDuration.Size = new System.Drawing.Size(160, 21);
@@ -216,7 +220,7 @@
             // lblHighSpeedGrowthDuration
             // 
             this.lblHighSpeedGrowthDuration.AutoSize = true;
-            this.lblHighSpeedGrowthDuration.Location = new System.Drawing.Point(15, 264);
+            this.lblHighSpeedGrowthDuration.Location = new System.Drawing.Point(5, 206);
             this.lblHighSpeedGrowthDuration.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblHighSpeedGrowthDuration.Name = "lblHighSpeedGrowthDuration";
             this.lblHighSpeedGrowthDuration.Size = new System.Drawing.Size(173, 12);
@@ -225,7 +229,7 @@
             // 
             // txtProfitSharingRate
             // 
-            this.txtProfitSharingRate.Location = new System.Drawing.Point(192, 111);
+            this.txtProfitSharingRate.Location = new System.Drawing.Point(182, 53);
             this.txtProfitSharingRate.Margin = new System.Windows.Forms.Padding(2);
             this.txtProfitSharingRate.Name = "txtProfitSharingRate";
             this.txtProfitSharingRate.Size = new System.Drawing.Size(160, 21);
@@ -235,7 +239,7 @@
             // lblProfitSharingRate
             // 
             this.lblProfitSharingRate.AutoSize = true;
-            this.lblProfitSharingRate.Location = new System.Drawing.Point(15, 113);
+            this.lblProfitSharingRate.Location = new System.Drawing.Point(5, 55);
             this.lblProfitSharingRate.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblProfitSharingRate.Name = "lblProfitSharingRate";
             this.lblProfitSharingRate.Size = new System.Drawing.Size(143, 12);
@@ -245,7 +249,7 @@
             // lblTradeTaxRate
             // 
             this.lblTradeTaxRate.AutoSize = true;
-            this.lblTradeTaxRate.Location = new System.Drawing.Point(15, 54);
+            this.lblTradeTaxRate.Location = new System.Drawing.Point(5, 26);
             this.lblTradeTaxRate.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblTradeTaxRate.Name = "lblTradeTaxRate";
             this.lblTradeTaxRate.Size = new System.Drawing.Size(125, 12);
@@ -254,7 +258,7 @@
             // 
             // txtProfitSharingTax
             // 
-            this.txtProfitSharingTax.Location = new System.Drawing.Point(192, 290);
+            this.txtProfitSharingTax.Location = new System.Drawing.Point(182, 232);
             this.txtProfitSharingTax.Margin = new System.Windows.Forms.Padding(2);
             this.txtProfitSharingTax.Name = "txtProfitSharingTax";
             this.txtProfitSharingTax.Size = new System.Drawing.Size(160, 21);
@@ -264,7 +268,7 @@
             // lblProfitSharingTax
             // 
             this.lblProfitSharingTax.AutoSize = true;
-            this.lblProfitSharingTax.Location = new System.Drawing.Point(15, 293);
+            this.lblProfitSharingTax.Location = new System.Drawing.Point(5, 235);
             this.lblProfitSharingTax.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblProfitSharingTax.Name = "lblProfitSharingTax";
             this.lblProfitSharingTax.Size = new System.Drawing.Size(161, 12);
@@ -273,7 +277,7 @@
             // 
             // txtDepressionFrequency
             // 
-            this.txtDepressionFrequency.Location = new System.Drawing.Point(192, 320);
+            this.txtDepressionFrequency.Location = new System.Drawing.Point(182, 262);
             this.txtDepressionFrequency.Margin = new System.Windows.Forms.Padding(2);
             this.txtDepressionFrequency.Name = "txtDepressionFrequency";
             this.txtDepressionFrequency.Size = new System.Drawing.Size(160, 21);
@@ -283,7 +287,7 @@
             // lblDepressionFrequency
             // 
             this.lblDepressionFrequency.AutoSize = true;
-            this.lblDepressionFrequency.Location = new System.Drawing.Point(15, 322);
+            this.lblDepressionFrequency.Location = new System.Drawing.Point(5, 264);
             this.lblDepressionFrequency.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblDepressionFrequency.Name = "lblDepressionFrequency";
             this.lblDepressionFrequency.Size = new System.Drawing.Size(179, 12);
@@ -292,7 +296,7 @@
             // 
             // txtDepressionLossRate
             // 
-            this.txtDepressionLossRate.Location = new System.Drawing.Point(192, 348);
+            this.txtDepressionLossRate.Location = new System.Drawing.Point(182, 290);
             this.txtDepressionLossRate.Margin = new System.Windows.Forms.Padding(2);
             this.txtDepressionLossRate.Name = "txtDepressionLossRate";
             this.txtDepressionLossRate.Size = new System.Drawing.Size(160, 21);
@@ -302,7 +306,7 @@
             // lblDepressionLossRate
             // 
             this.lblDepressionLossRate.AutoSize = true;
-            this.lblDepressionLossRate.Location = new System.Drawing.Point(15, 350);
+            this.lblDepressionLossRate.Location = new System.Drawing.Point(5, 292);
             this.lblDepressionLossRate.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblDepressionLossRate.Name = "lblDepressionLossRate";
             this.lblDepressionLossRate.Size = new System.Drawing.Size(143, 12);
@@ -311,7 +315,7 @@
             // 
             // txtStockHeldDuration
             // 
-            this.txtStockHeldDuration.Location = new System.Drawing.Point(192, 380);
+            this.txtStockHeldDuration.Location = new System.Drawing.Point(182, 322);
             this.txtStockHeldDuration.Margin = new System.Windows.Forms.Padding(2);
             this.txtStockHeldDuration.Name = "txtStockHeldDuration";
             this.txtStockHeldDuration.Size = new System.Drawing.Size(160, 21);
@@ -321,7 +325,7 @@
             // lblStockHeldDuration
             // 
             this.lblStockHeldDuration.AutoSize = true;
-            this.lblStockHeldDuration.Location = new System.Drawing.Point(15, 382);
+            this.lblStockHeldDuration.Location = new System.Drawing.Point(5, 324);
             this.lblStockHeldDuration.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblStockHeldDuration.Name = "lblStockHeldDuration";
             this.lblStockHeldDuration.Size = new System.Drawing.Size(167, 12);
@@ -330,7 +334,7 @@
             // 
             // btnCalculate
             // 
-            this.btnCalculate.Location = new System.Drawing.Point(93, 484);
+            this.btnCalculate.Location = new System.Drawing.Point(93, 506);
             this.btnCalculate.Margin = new System.Windows.Forms.Padding(2);
             this.btnCalculate.Name = "btnCalculate";
             this.btnCalculate.Size = new System.Drawing.Size(177, 34);
@@ -341,7 +345,7 @@
             // 
             // btnParseCompanyDetails
             // 
-            this.btnParseCompanyDetails.Location = new System.Drawing.Point(93, 435);
+            this.btnParseCompanyDetails.Location = new System.Drawing.Point(93, 457);
             this.btnParseCompanyDetails.Margin = new System.Windows.Forms.Padding(2);
             this.btnParseCompanyDetails.Name = "btnParseCompanyDetails";
             this.btnParseCompanyDetails.Size = new System.Drawing.Size(177, 34);
@@ -367,6 +371,7 @@
             // 
             // tabControl1
             // 
+            this.tabControl1.AllowDrop = true;
             this.tabControl1.Controls.Add(this.calculationPage);
             this.tabControl1.Controls.Add(this.stockMarketPage);
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
@@ -374,37 +379,15 @@
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(386, 576);
             this.tabControl1.TabIndex = 30;
+            this.tabControl1.DragDrop += new System.Windows.Forms.DragEventHandler(this.tabControl1_DragDrop);
+            this.tabControl1.DragEnter += new System.Windows.Forms.DragEventHandler(this.tabControl1_DragEnter);
             // 
             // calculationPage
             // 
-            this.calculationPage.Controls.Add(this.lblMarketPrice);
-            this.calculationPage.Controls.Add(this.txtMarketPrice);
+            this.calculationPage.Controls.Add(this.groupBoxForManualInputParams);
+            this.calculationPage.Controls.Add(this.groupBoxForServerParseParams);
             this.calculationPage.Controls.Add(this.btnCalculate);
             this.calculationPage.Controls.Add(this.btnParseCompanyDetails);
-            this.calculationPage.Controls.Add(this.txtTradeTaxRate);
-            this.calculationPage.Controls.Add(this.lblProfitPerShare);
-            this.calculationPage.Controls.Add(this.txtStockHeldDuration);
-            this.calculationPage.Controls.Add(this.txtProfitPerShare);
-            this.calculationPage.Controls.Add(this.lblStockHeldDuration);
-            this.calculationPage.Controls.Add(this.lblCompanyDuration);
-            this.calculationPage.Controls.Add(this.txtDepressionLossRate);
-            this.calculationPage.Controls.Add(this.txtCompanyDuration);
-            this.calculationPage.Controls.Add(this.lblDepressionLossRate);
-            this.calculationPage.Controls.Add(this.lblDiscountRate);
-            this.calculationPage.Controls.Add(this.txtDepressionFrequency);
-            this.calculationPage.Controls.Add(this.txtDiscountRate);
-            this.calculationPage.Controls.Add(this.lblDepressionFrequency);
-            this.calculationPage.Controls.Add(this.lblNormalGrowthRate);
-            this.calculationPage.Controls.Add(this.txtProfitSharingTax);
-            this.calculationPage.Controls.Add(this.txtNormalGrowthRate);
-            this.calculationPage.Controls.Add(this.lblProfitSharingTax);
-            this.calculationPage.Controls.Add(this.lblHighSpeedGrowthRate);
-            this.calculationPage.Controls.Add(this.lblTradeTaxRate);
-            this.calculationPage.Controls.Add(this.txtHighSpeedGrowthRate);
-            this.calculationPage.Controls.Add(this.txtProfitSharingRate);
-            this.calculationPage.Controls.Add(this.lblHighSpeedGrowthDuration);
-            this.calculationPage.Controls.Add(this.lblProfitSharingRate);
-            this.calculationPage.Controls.Add(this.txtHighSpeedGrowthDuration);
             this.calculationPage.Location = new System.Drawing.Point(4, 22);
             this.calculationPage.Name = "calculationPage";
             this.calculationPage.Padding = new System.Windows.Forms.Padding(3);
@@ -412,6 +395,50 @@
             this.calculationPage.TabIndex = 0;
             this.calculationPage.Text = "calculationPage";
             this.calculationPage.UseVisualStyleBackColor = true;
+            // 
+            // groupBoxForManualInputParams
+            // 
+            this.groupBoxForManualInputParams.Controls.Add(this.lblTradeTaxRate);
+            this.groupBoxForManualInputParams.Controls.Add(this.txtHighSpeedGrowthDuration);
+            this.groupBoxForManualInputParams.Controls.Add(this.lblProfitSharingRate);
+            this.groupBoxForManualInputParams.Controls.Add(this.lblHighSpeedGrowthDuration);
+            this.groupBoxForManualInputParams.Controls.Add(this.txtTradeTaxRate);
+            this.groupBoxForManualInputParams.Controls.Add(this.txtProfitSharingRate);
+            this.groupBoxForManualInputParams.Controls.Add(this.txtStockHeldDuration);
+            this.groupBoxForManualInputParams.Controls.Add(this.txtHighSpeedGrowthRate);
+            this.groupBoxForManualInputParams.Controls.Add(this.lblStockHeldDuration);
+            this.groupBoxForManualInputParams.Controls.Add(this.lblHighSpeedGrowthRate);
+            this.groupBoxForManualInputParams.Controls.Add(this.lblCompanyDuration);
+            this.groupBoxForManualInputParams.Controls.Add(this.lblProfitSharingTax);
+            this.groupBoxForManualInputParams.Controls.Add(this.txtDepressionLossRate);
+            this.groupBoxForManualInputParams.Controls.Add(this.txtNormalGrowthRate);
+            this.groupBoxForManualInputParams.Controls.Add(this.txtCompanyDuration);
+            this.groupBoxForManualInputParams.Controls.Add(this.txtProfitSharingTax);
+            this.groupBoxForManualInputParams.Controls.Add(this.lblDepressionLossRate);
+            this.groupBoxForManualInputParams.Controls.Add(this.lblNormalGrowthRate);
+            this.groupBoxForManualInputParams.Controls.Add(this.lblDiscountRate);
+            this.groupBoxForManualInputParams.Controls.Add(this.lblDepressionFrequency);
+            this.groupBoxForManualInputParams.Controls.Add(this.txtDepressionFrequency);
+            this.groupBoxForManualInputParams.Controls.Add(this.txtDiscountRate);
+            this.groupBoxForManualInputParams.Location = new System.Drawing.Point(6, 98);
+            this.groupBoxForManualInputParams.Name = "groupBoxForManualInputParams";
+            this.groupBoxForManualInputParams.Size = new System.Drawing.Size(357, 354);
+            this.groupBoxForManualInputParams.TabIndex = 30;
+            this.groupBoxForManualInputParams.TabStop = false;
+            this.groupBoxForManualInputParams.Text = "Manual Input Params";
+            // 
+            // groupBoxForServerParseParams
+            // 
+            this.groupBoxForServerParseParams.Controls.Add(this.lblMarketPrice);
+            this.groupBoxForServerParseParams.Controls.Add(this.txtProfitPerShare);
+            this.groupBoxForServerParseParams.Controls.Add(this.txtMarketPrice);
+            this.groupBoxForServerParseParams.Controls.Add(this.lblProfitPerShare);
+            this.groupBoxForServerParseParams.Location = new System.Drawing.Point(6, 6);
+            this.groupBoxForServerParseParams.Name = "groupBoxForServerParseParams";
+            this.groupBoxForServerParseParams.Size = new System.Drawing.Size(357, 86);
+            this.groupBoxForServerParseParams.TabIndex = 29;
+            this.groupBoxForServerParseParams.TabStop = false;
+            this.groupBoxForServerParseParams.Text = "Server Parsable Params";
             // 
             // stockMarketPage
             // 
@@ -446,6 +473,25 @@
             this.groupBoxForStockInfo.TabIndex = 40;
             this.groupBoxForStockInfo.TabStop = false;
             this.groupBoxForStockInfo.Text = "StockInfo";
+            // 
+            // lblPERatio
+            // 
+            this.lblPERatio.AutoSize = true;
+            this.lblPERatio.Location = new System.Drawing.Point(11, 191);
+            this.lblPERatio.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblPERatio.Name = "lblPERatio";
+            this.lblPERatio.Size = new System.Drawing.Size(59, 12);
+            this.lblPERatio.TabIndex = 42;
+            this.lblPERatio.Text = "PE Ratio:";
+            // 
+            // txtPERatio
+            // 
+            this.txtPERatio.Enabled = false;
+            this.txtPERatio.Location = new System.Drawing.Point(170, 189);
+            this.txtPERatio.Margin = new System.Windows.Forms.Padding(2);
+            this.txtPERatio.Name = "txtPERatio";
+            this.txtPERatio.Size = new System.Drawing.Size(184, 21);
+            this.txtPERatio.TabIndex = 43;
             // 
             // lblDateOfInfo
             // 
@@ -551,25 +597,6 @@
             this.btnRetrieveStockInfo.UseVisualStyleBackColor = true;
             this.btnRetrieveStockInfo.Click += new System.EventHandler(this.btnRetrieveStockInfo_Click);
             // 
-            // lblPERatio
-            // 
-            this.lblPERatio.AutoSize = true;
-            this.lblPERatio.Location = new System.Drawing.Point(11, 191);
-            this.lblPERatio.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblPERatio.Name = "lblPERatio";
-            this.lblPERatio.Size = new System.Drawing.Size(59, 12);
-            this.lblPERatio.TabIndex = 42;
-            this.lblPERatio.Text = "PE Ratio:";
-            // 
-            // txtPERatio
-            // 
-            this.txtPERatio.Enabled = false;
-            this.txtPERatio.Location = new System.Drawing.Point(170, 189);
-            this.txtPERatio.Margin = new System.Windows.Forms.Padding(2);
-            this.txtPERatio.Name = "txtPERatio";
-            this.txtPERatio.Size = new System.Drawing.Size(184, 21);
-            this.txtPERatio.TabIndex = 43;
-            // 
             // Form1
             // 
             this.AllowDrop = true;
@@ -580,10 +607,12 @@
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
             this.Text = "StockValueCalculator";
-            this.DragDrop += new System.Windows.Forms.DragEventHandler(this.Form1_DragDrop);
             this.tabControl1.ResumeLayout(false);
             this.calculationPage.ResumeLayout(false);
-            this.calculationPage.PerformLayout();
+            this.groupBoxForManualInputParams.ResumeLayout(false);
+            this.groupBoxForManualInputParams.PerformLayout();
+            this.groupBoxForServerParseParams.ResumeLayout(false);
+            this.groupBoxForServerParseParams.PerformLayout();
             this.stockMarketPage.ResumeLayout(false);
             this.groupBoxForStockInfo.ResumeLayout(false);
             this.groupBoxForStockInfo.PerformLayout();
@@ -640,6 +669,8 @@
         private System.Windows.Forms.TextBox txtDateOfInfo;
         private System.Windows.Forms.Label lblPERatio;
         private System.Windows.Forms.TextBox txtPERatio;
+        private System.Windows.Forms.GroupBox groupBoxForManualInputParams;
+        private System.Windows.Forms.GroupBox groupBoxForServerParseParams;
     }
 }
 
