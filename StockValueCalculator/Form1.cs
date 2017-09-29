@@ -32,6 +32,8 @@ namespace StockValueCalculator
 
         private decimal assumedStockPriceGrowth = new decimal(0.02);
 
+        private string preferStockListFileName = "PreferStockList.csv";
+
         //temp variables for calculation
         private decimal totalInnerValue;
         private decimal currentInterest;
@@ -51,12 +53,14 @@ namespace StockValueCalculator
         private string parseCompanyDetailsFromServerSuccessMessage = PromptMessages.parseCompanyDetailsFromServerSuccessMessageEN;
         private string parseCompanyDetailsFromServerError = PromptMessages.parseCompanyDetailsFromServerErrorEN;
         private string unknownStockIDMessage = PromptMessages.unknownStockIDMessageEN;
+        private string clearPreferStockListSuccessMessage = PromptMessages.clearPreferStockListSuccessMessageEN;
 
         public Form1()
         {
             InitializeComponent();
             setLanguagePreference();
             setCalculationInitValues();
+            setStockInfoInitValues();
         }
 
         private void setLanguagePreference()
@@ -81,6 +85,7 @@ namespace StockValueCalculator
                 btnParseCompanyDetailsFromServer.Text = ConfigurationManager.AppSettings.Get("btnParseCompanyDetailsFromServer_zh");
                 btnCalculate.Text = ConfigurationManager.AppSettings.Get("btnCalculate_zh");
                 btnRetrieveStockInfo.Text = ConfigurationManager.AppSettings.Get("btnRefreshStockList_zh");
+                btnClearPreferStockList.Text = ConfigurationManager.AppSettings.Get("btnClearPreferStockList_zh");
 
                 lblSelectedStockID.Text = ConfigurationManager.AppSettings.Get("lblStockID_zh");
                 lblCompanyName.Text = ConfigurationManager.AppSettings.Get("lblCompanyName_zh");
@@ -92,8 +97,11 @@ namespace StockValueCalculator
                 calculationPage.Text = ConfigurationManager.AppSettings.Get("tabCalculationPage_zh");
                 stockMarketPage.Text = ConfigurationManager.AppSettings.Get("tabStockMarketPage_zh");
                 groupBoxForStockInfo.Text = ConfigurationManager.AppSettings.Get("groupStockInfo_zh");
+                groupBoxForCheckingParameters.Text = ConfigurationManager.AppSettings.Get("groupBoxCheckingParameters_zh");
                 groupBoxForServerParseParams.Text = ConfigurationManager.AppSettings.Get("groupBoxForServerParseParams_zh");
                 groupBoxForManualInputParams.Text = ConfigurationManager.AppSettings.Get("groupBoxForManualInputParams_zh");
+
+                checkBoxKeepPreferStockID.Text = ConfigurationManager.AppSettings.Get("checkBoxKeepPreferStockID_zh");
 
                 successMessage = PromptMessages.successMessageZH;
                 parseCompanyDetailsFormatError = PromptMessages.parseCompanyDetailsFormatErrorZH;
@@ -103,6 +111,7 @@ namespace StockValueCalculator
                 parseCompanyDetailsFromServerSuccessMessage = PromptMessages.parseCompanyDetailsFromServerSuccessMessageZH;
                 parseCompanyDetailsFromServerError = PromptMessages.parseCompanyDetailsFromServerErrorZH;
                 unknownStockIDMessage = PromptMessages.unknownStockIDMessageZH;
+                clearPreferStockListSuccessMessage = PromptMessages.clearPreferStockListSuccessMessageZH;
             }
         }
 
@@ -121,6 +130,12 @@ namespace StockValueCalculator
             txtDepressionFrequency.Text = ConfigurationManager.AppSettings.Get("initValueDepressionFrequency");
             txtDepressionLossRate.Text = ConfigurationManager.AppSettings.Get("initValueDepressionLossRate");
             txtStockHeldDuration.Text = ConfigurationManager.AppSettings.Get("initValueStockHeldDuration");
+        }
+
+        private void setStockInfoInitValues()
+        {
+            checkBoxKeepPreferStockID.Checked = Convert.ToBoolean(ConfigurationManager.AppSettings.Get("initValueKeepPreferStockList"));
+            comboBoxStockIDList.Items.AddRange(Utils.readPreferStockIDList());
         }
 
         private void btnCalculate_Click(object sender, EventArgs e)
@@ -331,20 +346,20 @@ namespace StockValueCalculator
         private void btnRetrieveStockInfo_Click(object sender, EventArgs e)
         {
             
-            string stockID = txtStockID.Text.Trim();
+            string stockID = comboBoxStockIDList.Text.Trim();
 
             StockMarketTypes marketType = Utils.checkMarketType(stockID);
 
             switch (marketType)
             {
                 case StockMarketTypes.CHINA_SZ_EXCHANGE_MARKET:
-                    retrieveStockInfoByID("sz" + stockID);
+                    retrieveStockInfoByID(stockID,"sz" + stockID);
                     break;
                 case StockMarketTypes.CHINA_SH_EXCHANGE_MARKET:
-                    retrieveStockInfoByID("sh" + stockID);
+                    retrieveStockInfoByID(stockID,"sh" + stockID);
                     break;
                 case StockMarketTypes.HK_EXCHANGE_MARKET:
-                    retrieveStockInfoByID("hk" + stockID);
+                    retrieveStockInfoByID(stockID,"hk" + stockID);
                     break;
                 case StockMarketTypes.UNKNOWN:
                     MessageBox.Show(unknownStockIDMessage);
@@ -353,7 +368,7 @@ namespace StockValueCalculator
             
         }
 
-        private void retrieveStockInfoByID(string stockID)
+        private void retrieveStockInfoByID(string originalStockID, string stockID)
         {
             string requestURL = URLTemplates.baiduTemplateByID.Replace("[_STOCK_ID_]", stockID);
 
@@ -406,6 +421,17 @@ namespace StockValueCalculator
                 txtCompanyProfitPerShare.Text = Convert.ToString(companyProfitPerShare);
 
                 MessageBox.Show(retrieveStockInfoSuccessMessage);
+
+                string persistString = "\n" + originalStockID + "," + nameNode.InnerText.Trim();
+                if (checkBoxKeepPreferStockID.Checked)
+                {
+                    if(!File.Exists(preferStockListFileName) || !File.ReadAllText(preferStockListFileName).Contains(persistString))
+                    {
+                        File.AppendAllText(preferStockListFileName, persistString);
+                    }                  
+                    comboBoxStockIDList.Items.Clear();
+                    comboBoxStockIDList.Items.AddRange(Utils.readPreferStockIDList());
+                }
             } else
             {
                 MessageBox.Show(retrieveStockInfoFailedMessage);
@@ -441,6 +467,33 @@ namespace StockValueCalculator
             else
             {
                 e.Effect = DragDropEffects.None;
+            }
+        }
+
+        private void btnClearPreferStockList_Click(object sender, EventArgs e)
+        {
+            if (File.Exists(preferStockListFileName))
+            {
+                File.WriteAllText(preferStockListFileName, "");
+            }
+
+            comboBoxStockIDList.Items.Clear();
+
+            MessageBox.Show(clearPreferStockListSuccessMessage);
+        }
+
+        private void comboBoxStockIDList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int idx = comboBoxStockIDList.SelectedIndex;
+            string[] fileContent = File.ReadAllLines(preferStockListFileName);
+
+            if(fileContent.Length >= idx)
+            {
+                txtCompanyName.Text = fileContent[idx].Split(',').Length > 1 ? fileContent[idx].Split(',')[1] : "";
+                txtDateOfInfo.Text = "";
+                txtCompanyProfitPerShare.Text = "";
+                txtLastTradingPrice.Text = "";
+                txtPERatio.Text = "";
             }
         }
     }

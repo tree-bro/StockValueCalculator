@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace StockValueCalculator
 {
@@ -48,6 +45,19 @@ namespace StockValueCalculator
             {
                 return StockMarketTypes.UNKNOWN;
             }
+        }
+
+        public static string[] readPreferStockIDList()
+        {
+            List<string> resultList = new List<string>();
+            if (File.Exists("PreferStockList.csv"))
+            {
+                foreach (string line in File.ReadAllLines("PreferStockList.csv"))
+                {
+                    resultList.Add(line.Split(',')[0]);
+                }
+            }
+            return resultList.ToArray();
         }
     }
 }

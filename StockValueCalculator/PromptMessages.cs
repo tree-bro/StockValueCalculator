@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace StockValueCalculator
+﻿namespace StockValueCalculator
 {
     public class PromptMessages
     {
@@ -88,5 +82,11 @@ namespace StockValueCalculator
 
         public static string unknownStockIDMessageZH =
             @"未知的股票代码!请查实后再输入一次！";
+
+        public static string clearPreferStockListSuccessMessageEN =
+            @"Successfully cleared prefer stock list!";
+
+        public static string clearPreferStockListSuccessMessageZH =
+            @"成功清除偏好股票列表！";
     }
 }

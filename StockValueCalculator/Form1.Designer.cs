@@ -74,15 +74,19 @@
             this.txtCompanyProfitPerShare = new System.Windows.Forms.TextBox();
             this.txtLastTradingPrice = new System.Windows.Forms.TextBox();
             this.lblLastTradingPrice = new System.Windows.Forms.Label();
-            this.txtStockID = new System.Windows.Forms.TextBox();
             this.txtCompanyName = new System.Windows.Forms.TextBox();
             this.btnRetrieveStockInfo = new System.Windows.Forms.Button();
+            this.btnClearPreferStockList = new System.Windows.Forms.Button();
+            this.comboBoxStockIDList = new System.Windows.Forms.ComboBox();
+            this.checkBoxKeepPreferStockID = new System.Windows.Forms.CheckBox();
+            this.groupBoxForCheckingParameters = new System.Windows.Forms.GroupBox();
             this.tabControl1.SuspendLayout();
             this.calculationPage.SuspendLayout();
             this.groupBoxForManualInputParams.SuspendLayout();
             this.groupBoxForServerParseParams.SuspendLayout();
             this.stockMarketPage.SuspendLayout();
             this.groupBoxForStockInfo.SuspendLayout();
+            this.groupBoxForCheckingParameters.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblMarketPrice
@@ -360,7 +364,7 @@
             // 
             // btnParseCompanyDetailsFromServer
             // 
-            this.btnParseCompanyDetailsFromServer.Location = new System.Drawing.Point(99, 402);
+            this.btnParseCompanyDetailsFromServer.Location = new System.Drawing.Point(92, 391);
             this.btnParseCompanyDetailsFromServer.Margin = new System.Windows.Forms.Padding(2);
             this.btnParseCompanyDetailsFromServer.Name = "btnParseCompanyDetailsFromServer";
             this.btnParseCompanyDetailsFromServer.Size = new System.Drawing.Size(177, 34);
@@ -442,6 +446,8 @@
             // 
             // stockMarketPage
             // 
+            this.stockMarketPage.Controls.Add(this.groupBoxForCheckingParameters);
+            this.stockMarketPage.Controls.Add(this.btnClearPreferStockList);
             this.stockMarketPage.Controls.Add(this.groupBoxForStockInfo);
             this.stockMarketPage.Controls.Add(this.btnRetrieveStockInfo);
             this.stockMarketPage.Controls.Add(this.btnParseCompanyDetailsFromServer);
@@ -455,6 +461,7 @@
             // 
             // groupBoxForStockInfo
             // 
+            this.groupBoxForStockInfo.Controls.Add(this.comboBoxStockIDList);
             this.groupBoxForStockInfo.Controls.Add(this.lblPERatio);
             this.groupBoxForStockInfo.Controls.Add(this.txtPERatio);
             this.groupBoxForStockInfo.Controls.Add(this.lblDateOfInfo);
@@ -465,11 +472,10 @@
             this.groupBoxForStockInfo.Controls.Add(this.txtCompanyProfitPerShare);
             this.groupBoxForStockInfo.Controls.Add(this.txtLastTradingPrice);
             this.groupBoxForStockInfo.Controls.Add(this.lblLastTradingPrice);
-            this.groupBoxForStockInfo.Controls.Add(this.txtStockID);
             this.groupBoxForStockInfo.Controls.Add(this.txtCompanyName);
-            this.groupBoxForStockInfo.Location = new System.Drawing.Point(6, 6);
+            this.groupBoxForStockInfo.Location = new System.Drawing.Point(6, 61);
             this.groupBoxForStockInfo.Name = "groupBoxForStockInfo";
-            this.groupBoxForStockInfo.Size = new System.Drawing.Size(366, 232);
+            this.groupBoxForStockInfo.Size = new System.Drawing.Size(366, 230);
             this.groupBoxForStockInfo.TabIndex = 40;
             this.groupBoxForStockInfo.TabStop = false;
             this.groupBoxForStockInfo.Text = "StockInfo";
@@ -477,7 +483,7 @@
             // lblPERatio
             // 
             this.lblPERatio.AutoSize = true;
-            this.lblPERatio.Location = new System.Drawing.Point(11, 191);
+            this.lblPERatio.Location = new System.Drawing.Point(5, 187);
             this.lblPERatio.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblPERatio.Name = "lblPERatio";
             this.lblPERatio.Size = new System.Drawing.Size(59, 12);
@@ -487,7 +493,7 @@
             // txtPERatio
             // 
             this.txtPERatio.Enabled = false;
-            this.txtPERatio.Location = new System.Drawing.Point(170, 189);
+            this.txtPERatio.Location = new System.Drawing.Point(164, 185);
             this.txtPERatio.Margin = new System.Windows.Forms.Padding(2);
             this.txtPERatio.Name = "txtPERatio";
             this.txtPERatio.Size = new System.Drawing.Size(184, 21);
@@ -496,7 +502,7 @@
             // lblDateOfInfo
             // 
             this.lblDateOfInfo.AutoSize = true;
-            this.lblDateOfInfo.Location = new System.Drawing.Point(11, 91);
+            this.lblDateOfInfo.Location = new System.Drawing.Point(5, 87);
             this.lblDateOfInfo.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblDateOfInfo.Name = "lblDateOfInfo";
             this.lblDateOfInfo.Size = new System.Drawing.Size(83, 12);
@@ -506,7 +512,7 @@
             // txtDateOfInfo
             // 
             this.txtDateOfInfo.Enabled = false;
-            this.txtDateOfInfo.Location = new System.Drawing.Point(170, 89);
+            this.txtDateOfInfo.Location = new System.Drawing.Point(164, 85);
             this.txtDateOfInfo.Margin = new System.Windows.Forms.Padding(2);
             this.txtDateOfInfo.Name = "txtDateOfInfo";
             this.txtDateOfInfo.Size = new System.Drawing.Size(184, 21);
@@ -515,7 +521,7 @@
             // lblSelectedStockID
             // 
             this.lblSelectedStockID.AutoSize = true;
-            this.lblSelectedStockID.Location = new System.Drawing.Point(11, 33);
+            this.lblSelectedStockID.Location = new System.Drawing.Point(5, 29);
             this.lblSelectedStockID.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblSelectedStockID.Name = "lblSelectedStockID";
             this.lblSelectedStockID.Size = new System.Drawing.Size(59, 12);
@@ -525,7 +531,7 @@
             // lblCompanyProfitPerShare
             // 
             this.lblCompanyProfitPerShare.AutoSize = true;
-            this.lblCompanyProfitPerShare.Location = new System.Drawing.Point(11, 155);
+            this.lblCompanyProfitPerShare.Location = new System.Drawing.Point(5, 151);
             this.lblCompanyProfitPerShare.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblCompanyProfitPerShare.Name = "lblCompanyProfitPerShare";
             this.lblCompanyProfitPerShare.Size = new System.Drawing.Size(155, 12);
@@ -535,7 +541,7 @@
             // lblCompanyName
             // 
             this.lblCompanyName.AutoSize = true;
-            this.lblCompanyName.Location = new System.Drawing.Point(11, 62);
+            this.lblCompanyName.Location = new System.Drawing.Point(5, 58);
             this.lblCompanyName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblCompanyName.Name = "lblCompanyName";
             this.lblCompanyName.Size = new System.Drawing.Size(83, 12);
@@ -545,7 +551,7 @@
             // txtCompanyProfitPerShare
             // 
             this.txtCompanyProfitPerShare.Enabled = false;
-            this.txtCompanyProfitPerShare.Location = new System.Drawing.Point(170, 153);
+            this.txtCompanyProfitPerShare.Location = new System.Drawing.Point(164, 149);
             this.txtCompanyProfitPerShare.Margin = new System.Windows.Forms.Padding(2);
             this.txtCompanyProfitPerShare.Name = "txtCompanyProfitPerShare";
             this.txtCompanyProfitPerShare.Size = new System.Drawing.Size(184, 21);
@@ -554,7 +560,7 @@
             // txtLastTradingPrice
             // 
             this.txtLastTradingPrice.Enabled = false;
-            this.txtLastTradingPrice.Location = new System.Drawing.Point(170, 121);
+            this.txtLastTradingPrice.Location = new System.Drawing.Point(164, 117);
             this.txtLastTradingPrice.Margin = new System.Windows.Forms.Padding(2);
             this.txtLastTradingPrice.Name = "txtLastTradingPrice";
             this.txtLastTradingPrice.Size = new System.Drawing.Size(184, 21);
@@ -563,25 +569,17 @@
             // lblLastTradingPrice
             // 
             this.lblLastTradingPrice.AutoSize = true;
-            this.lblLastTradingPrice.Location = new System.Drawing.Point(11, 123);
+            this.lblLastTradingPrice.Location = new System.Drawing.Point(5, 119);
             this.lblLastTradingPrice.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblLastTradingPrice.Name = "lblLastTradingPrice";
             this.lblLastTradingPrice.Size = new System.Drawing.Size(119, 12);
             this.lblLastTradingPrice.TabIndex = 35;
             this.lblLastTradingPrice.Text = "Last Trading Price:";
             // 
-            // txtStockID
-            // 
-            this.txtStockID.Location = new System.Drawing.Point(170, 31);
-            this.txtStockID.Margin = new System.Windows.Forms.Padding(2);
-            this.txtStockID.Name = "txtStockID";
-            this.txtStockID.Size = new System.Drawing.Size(184, 21);
-            this.txtStockID.TabIndex = 33;
-            // 
             // txtCompanyName
             // 
             this.txtCompanyName.Enabled = false;
-            this.txtCompanyName.Location = new System.Drawing.Point(170, 60);
+            this.txtCompanyName.Location = new System.Drawing.Point(164, 56);
             this.txtCompanyName.Margin = new System.Windows.Forms.Padding(2);
             this.txtCompanyName.Name = "txtCompanyName";
             this.txtCompanyName.Size = new System.Drawing.Size(184, 21);
@@ -589,13 +587,52 @@
             // 
             // btnRetrieveStockInfo
             // 
-            this.btnRetrieveStockInfo.Location = new System.Drawing.Point(99, 339);
+            this.btnRetrieveStockInfo.Location = new System.Drawing.Point(92, 343);
             this.btnRetrieveStockInfo.Name = "btnRetrieveStockInfo";
             this.btnRetrieveStockInfo.Size = new System.Drawing.Size(177, 32);
             this.btnRetrieveStockInfo.TabIndex = 31;
             this.btnRetrieveStockInfo.Text = "Retrieve Stock Info";
             this.btnRetrieveStockInfo.UseVisualStyleBackColor = true;
             this.btnRetrieveStockInfo.Click += new System.EventHandler(this.btnRetrieveStockInfo_Click);
+            // 
+            // btnClearPreferStockList
+            // 
+            this.btnClearPreferStockList.Location = new System.Drawing.Point(92, 442);
+            this.btnClearPreferStockList.Name = "btnClearPreferStockList";
+            this.btnClearPreferStockList.Size = new System.Drawing.Size(177, 30);
+            this.btnClearPreferStockList.TabIndex = 41;
+            this.btnClearPreferStockList.Text = "Clear Prefer Stock IDs";
+            this.btnClearPreferStockList.UseVisualStyleBackColor = true;
+            this.btnClearPreferStockList.Click += new System.EventHandler(this.btnClearPreferStockList_Click);
+            // 
+            // comboBoxStockIDList
+            // 
+            this.comboBoxStockIDList.FormattingEnabled = true;
+            this.comboBoxStockIDList.Location = new System.Drawing.Point(164, 26);
+            this.comboBoxStockIDList.Name = "comboBoxStockIDList";
+            this.comboBoxStockIDList.Size = new System.Drawing.Size(184, 20);
+            this.comboBoxStockIDList.TabIndex = 44;
+            this.comboBoxStockIDList.SelectedIndexChanged += new System.EventHandler(this.comboBoxStockIDList_SelectedIndexChanged);
+            // 
+            // checkBoxKeepPreferStockID
+            // 
+            this.checkBoxKeepPreferStockID.AutoSize = true;
+            this.checkBoxKeepPreferStockID.Location = new System.Drawing.Point(7, 20);
+            this.checkBoxKeepPreferStockID.Name = "checkBoxKeepPreferStockID";
+            this.checkBoxKeepPreferStockID.Size = new System.Drawing.Size(144, 16);
+            this.checkBoxKeepPreferStockID.TabIndex = 42;
+            this.checkBoxKeepPreferStockID.Text = "Keep Prefer Stock ID";
+            this.checkBoxKeepPreferStockID.UseVisualStyleBackColor = true;
+            // 
+            // groupBoxForCheckingParameters
+            // 
+            this.groupBoxForCheckingParameters.Controls.Add(this.checkBoxKeepPreferStockID);
+            this.groupBoxForCheckingParameters.Location = new System.Drawing.Point(6, 6);
+            this.groupBoxForCheckingParameters.Name = "groupBoxForCheckingParameters";
+            this.groupBoxForCheckingParameters.Size = new System.Drawing.Size(366, 49);
+            this.groupBoxForCheckingParameters.TabIndex = 43;
+            this.groupBoxForCheckingParameters.TabStop = false;
+            this.groupBoxForCheckingParameters.Text = "CheckingParameters";
             // 
             // Form1
             // 
@@ -616,6 +653,8 @@
             this.stockMarketPage.ResumeLayout(false);
             this.groupBoxForStockInfo.ResumeLayout(false);
             this.groupBoxForStockInfo.PerformLayout();
+            this.groupBoxForCheckingParameters.ResumeLayout(false);
+            this.groupBoxForCheckingParameters.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -657,7 +696,6 @@
         private System.Windows.Forms.TabPage stockMarketPage;
         private System.Windows.Forms.Button btnRetrieveStockInfo;
         private System.Windows.Forms.Label lblSelectedStockID;
-        private System.Windows.Forms.TextBox txtStockID;
         private System.Windows.Forms.TextBox txtCompanyName;
         private System.Windows.Forms.TextBox txtLastTradingPrice;
         private System.Windows.Forms.Label lblCompanyName;
@@ -671,6 +709,10 @@
         private System.Windows.Forms.TextBox txtPERatio;
         private System.Windows.Forms.GroupBox groupBoxForManualInputParams;
         private System.Windows.Forms.GroupBox groupBoxForServerParseParams;
+        private System.Windows.Forms.Button btnClearPreferStockList;
+        private System.Windows.Forms.ComboBox comboBoxStockIDList;
+        private System.Windows.Forms.CheckBox checkBoxKeepPreferStockID;
+        private System.Windows.Forms.GroupBox groupBoxForCheckingParameters;
     }
 }
 
