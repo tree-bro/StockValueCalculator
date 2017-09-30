@@ -203,6 +203,15 @@ namespace StockValueCalculator
             currentGrowth = decimal.One;
         }
 
+        private void resetStockInfoPageParameters()
+        {
+            txtCompanyName.Text = "";
+            txtDateOfInfo.Text = "";
+            txtLastTradingPrice.Text = "";
+            txtCompanyProfitPerShare.Text = "";
+            txtPERatio.Text = "";
+        }
+
         private void parseInputParameters()
         {
             decimal.TryParse(txtMarketPrice.Text.Trim(), out marketPrice);
@@ -332,17 +341,6 @@ namespace StockValueCalculator
             
         }
 
-        private void resetStockInfoPageParameters()
-        {
-            txtCompanyName.Text = "";
-            txtDateOfInfo.Text = "";
-            txtLastTradingPrice.Text = "";
-            txtCompanyProfitPerShare.Text = "";
-            txtPERatio.Text = "";
-        }
-
-
-
         private void btnRetrieveStockInfo_Click(object sender, EventArgs e)
         {
             
@@ -422,10 +420,16 @@ namespace StockValueCalculator
 
                 MessageBox.Show(retrieveStockInfoSuccessMessage);
 
-                string persistString = "\n" + originalStockID + "," + nameNode.InnerText.Trim();
+                // Persist new company info after successfully retrieved
                 if (checkBoxKeepPreferStockID.Checked)
                 {
-                    if(!File.Exists(preferStockListFileName) || !File.ReadAllText(preferStockListFileName).Contains(persistString))
+                    string persistString = "\n" + originalStockID + ","
+                                                + nameNode.InnerText.Trim() + ","
+                                                + dateNode.InnerText.Trim().Replace("&nbsp;", "") + ","
+                                                + Convert.ToString(lastTradingPrice) + ","
+                                                + Convert.ToString(companyProfitPerShare) + ","
+                                                + Convert.ToString(peRatio);
+                    if (!File.Exists(preferStockListFileName) || !File.ReadAllText(preferStockListFileName).Contains(persistString))
                     {
                         File.AppendAllText(preferStockListFileName, persistString);
                     }                  
@@ -490,10 +494,10 @@ namespace StockValueCalculator
             if(fileContent.Length >= idx)
             {
                 txtCompanyName.Text = fileContent[idx].Split(',').Length > 1 ? fileContent[idx].Split(',')[1] : "";
-                txtDateOfInfo.Text = "";
-                txtCompanyProfitPerShare.Text = "";
-                txtLastTradingPrice.Text = "";
-                txtPERatio.Text = "";
+                txtDateOfInfo.Text = fileContent[idx].Split(',').Length > 2 ? fileContent[idx].Split(',')[2] : "";
+                txtLastTradingPrice.Text = fileContent[idx].Split(',').Length > 3 ? fileContent[idx].Split(',')[3] : "";
+                txtCompanyProfitPerShare.Text = fileContent[idx].Split(',').Length > 4 ? fileContent[idx].Split(',')[4] : "";
+                txtPERatio.Text = fileContent[idx].Split(',').Length > 5 ? fileContent[idx].Split(',')[5] : "";
             }
         }
     }

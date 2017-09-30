@@ -18,3 +18,4 @@ F:\hx\source\StockValueCalculator\StockValueCalculator\obj\Debug\StockValueCalcu
 F:\hx\source\StockValueCalculator\StockValueCalculator\obj\Debug\StockValueCalculation.csproj.CoreCompileInputs.cache
 F:\hx\source\StockValueCalculator\StockValueCalculator\obj\Debug\StockValueCalculator.exe
 F:\hx\source\StockValueCalculator\StockValueCalculator\obj\Debug\StockValueCalculator.pdb
+F:\hx\source\StockValueCalculator\StockValueCalculator\obj\Debug\StockValueCalculation.csprojResolveAssemblyReference.cache
