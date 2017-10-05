@@ -10,5 +10,8 @@
 
         public static string baiduTemplateByID =
             @"https://gupiao.baidu.com/stock/[_STOCK_ID_].html";
+
+        public static string ifengProfitSharingTemplateByID =
+            @"http://app.finance.ifeng.com/data/stock/tab_fhpxjl.php?symbol=[_STOCK_ID_]";
     }
 }

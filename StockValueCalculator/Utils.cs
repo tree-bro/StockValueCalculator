@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using HtmlAgilityPack;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -58,6 +59,32 @@ namespace StockValueCalculator
                 }
             }
             return resultList.ToArray();
+        }
+
+        public static HtmlNode findNodeByText(HtmlNode parentNode, string xpath, string compareValue, int offset)
+        {
+            int count = 0;
+            bool foundMatch = false;
+            foreach (HtmlNode subNode in parentNode.SelectNodes(xpath))
+            {
+                if (subNode.InnerText.Equals(compareValue, System.StringComparison.CurrentCultureIgnoreCase))
+                {
+                    foundMatch = true;
+                }
+                if (foundMatch)
+                {
+                    if(count == offset)
+                    {
+                        return subNode;
+                    }
+                    else
+                    {
+                        count += 1;
+                    }
+                }
+            }
+
+            return null;
         }
     }
 }
