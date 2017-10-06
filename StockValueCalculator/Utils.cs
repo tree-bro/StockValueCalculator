@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -85,6 +86,116 @@ namespace StockValueCalculator
             }
 
             return null;
+        }
+
+        public static void parseCompanyBasicInfo(string url, ref StockInfo stockInfo)
+        {
+            // The following implementation is based on Baidu Stock API.
+            // It might need to be changed if we decide to use other API instead.
+            HtmlAgilityPack.HtmlDocument StockInfoHtmlDocument = Utils.loadHtmlDocument(url, Encoding.GetEncoding("utf-8"));
+
+            HtmlNode stockInfoTableNode = StockInfoHtmlDocument.DocumentNode.SelectSingleNode("//div[@class='stock-bets']");
+
+            if (stockInfoTableNode != null)
+            {
+                HtmlNode nameNode = stockInfoTableNode.SelectSingleNode("//a[@class='bets-name']");
+                HtmlNode dateNode = stockInfoTableNode.SelectSingleNode("//span[@class='state f-up']");
+                HtmlNode closePriceNode = stockInfoTableNode.SelectSingleNode("//strong[@class='_close']");
+                HtmlNode detailNode = stockInfoTableNode.SelectSingleNode("//div[@class='bets-content']//div");
+
+                stockInfo.CompanyName = nameNode.InnerText.Trim();
+                stockInfo.LastTradingPrice = closePriceNode.InnerText.Trim();
+                stockInfo.DateOfInfo = dateNode.InnerText.Trim().Replace("&nbsp;", "");
+                decimal companyProfitPerShare = decimal.Zero;
+                decimal peRatio = decimal.Zero;
+                decimal lastTradingPrice = decimal.Zero;
+                decimal.TryParse(closePriceNode.InnerText.Trim(), out lastTradingPrice);
+                foreach (HtmlNode subNode in detailNode.ChildNodes)
+                {
+                    if (subNode.HasChildNodes)
+                    {
+                        string firstChildText = subNode.FirstChild.InnerText.Trim();
+                        string lastChildText = subNode.LastChild.InnerText.Trim();
+                        if (firstChildText.Equals("每股收益", StringComparison.CurrentCultureIgnoreCase))
+                        {
+                            decimal.TryParse(lastChildText, out companyProfitPerShare);
+                        }
+                        else if (firstChildText.Contains("市盈率"))
+                        {
+                            stockInfo.PERatio = lastChildText;
+                            decimal.TryParse(lastChildText, out peRatio);
+                        }
+                        // if failed to parse last trading price (most likely to happen during long holiday), then use previous closing price instead
+                        else if (lastTradingPrice == decimal.Zero &&
+                            firstChildText.Equals("昨收", StringComparison.CurrentCultureIgnoreCase))
+                        {
+                            decimal.TryParse(lastChildText, out lastTradingPrice);
+                            stockInfo.DateOfInfo += "(顺延前一收盘价)";
+                        }
+                    }
+                }
+
+                // Recalculate the profit per share by the past days.
+                // Always use PERatio for bellow calculation if available.
+                if (peRatio > 0)
+                {
+                    companyProfitPerShare = decimal.Round(lastTradingPrice / peRatio * 365M / DateTime.Today.DayOfYear, 4);
+                }
+                else if (companyProfitPerShare > 0)
+                {
+                    companyProfitPerShare = decimal.Round(companyProfitPerShare * 365M / DateTime.Today.DayOfYear, 4);
+                }
+
+                stockInfo.CompanyProfitPerShare = Convert.ToString(companyProfitPerShare);
+            }
+         }
+
+        public static void parseCompanyProfitSharing(string url, ref StockInfo stockInfo)
+        {
+            // The following implementation is based on IFeng Stock API.
+            // It might need to be changed if we decide to use other API instead
+            HtmlAgilityPack.HtmlDocument lastProfitSharingHtmlDocument = Utils.loadHtmlDocument(url, Encoding.GetEncoding("utf-8"));
+
+            HtmlNodeCollection lastProfitSharingTableNodes = lastProfitSharingHtmlDocument.DocumentNode.SelectNodes("//table[@class='tab01']");
+
+            foreach (HtmlNode profitSharingTableNode in lastProfitSharingTableNodes)
+            {
+                HtmlNode tdNode = Utils.findNodeByText(profitSharingTableNode, ".//tr/td", "公告日期", 1);
+                DateTime publishDate = new DateTime();
+                DateTime.TryParse(tdNode.InnerText.Trim(), out publishDate);
+                HtmlNode profitSharingNode = Utils.findNodeByText(profitSharingTableNode, ".//tr/td", "每10股现金(含税)", 1);
+                string profitSharingNodeText = profitSharingNode.InnerText.Substring(0, profitSharingNode.InnerText.Length - 1);
+                if (publishDate.CompareTo(DateTime.Today.AddYears(-1)) > 0 &&
+                    publishDate.CompareTo(DateTime.Today) < 0)
+                {
+                    stockInfo.FirstYearProfitSharing = profitSharingNodeText;
+                }
+                else if (publishDate.CompareTo(DateTime.Today.AddYears(-2)) > 0 &&
+                    publishDate.CompareTo(DateTime.Today.AddYears(-1)) < 0)
+                {
+                    stockInfo.SecondYearProfitSharing = profitSharingNodeText;
+                }
+                else if (publishDate.CompareTo(DateTime.Today.AddYears(-3)) > 0 &&
+                    publishDate.CompareTo(DateTime.Today.AddYears(-2)) < 0)
+                {
+                    stockInfo.ThirdYearProfitSharing = profitSharingNodeText;
+                }
+                else if (publishDate.CompareTo(DateTime.Today.AddYears(-4)) > 0 &&
+                    publishDate.CompareTo(DateTime.Today.AddYears(-3)) < 0)
+                {
+                    stockInfo.FourthYearProfitSharing = profitSharingNodeText;
+                }
+                else if (publishDate.CompareTo(DateTime.Today.AddYears(-5)) > 0 &&
+                    publishDate.CompareTo(DateTime.Today.AddYears(-4)) < 0)
+                {
+                    stockInfo.FifthhYearProfitSharing = profitSharingNodeText;
+                }
+            }
+        }
+
+        public static string getValueFromArray(string[] inputArray, int idx)
+        {
+            return inputArray.Length > idx ? inputArray[idx] : "";
         }
     }
 }

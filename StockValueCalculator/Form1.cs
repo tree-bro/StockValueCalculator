@@ -405,97 +405,24 @@ namespace StockValueCalculator
             string stockInfoRequestURL = URLTemplates.baiduTemplateByID.Replace("[_STOCK_ID_]", stockID);
             string lastProfitSharingRequestURL = URLTemplates.ifengProfitSharingTemplateByID.Replace("[_STOCK_ID_]", originalStockID);
 
-            HtmlAgilityPack.HtmlDocument StockInfoHtmlDocument = Utils.loadHtmlDocument(stockInfoRequestURL, Encoding.GetEncoding("utf-8"));
-            HtmlAgilityPack.HtmlDocument lastProfitSharingHtmlDocument = Utils.loadHtmlDocument(lastProfitSharingRequestURL, Encoding.GetEncoding("utf-8"));
+            StockInfo stockInfo = new StockInfo();
 
-            HtmlNode stockInfoTableNode = StockInfoHtmlDocument.DocumentNode.SelectSingleNode("//div[@class='stock-bets']");
-            HtmlNodeCollection lastProfitSharingTableNodes = lastProfitSharingHtmlDocument.DocumentNode.SelectNodes("//table[@class='tab01']");
+            Utils.parseCompanyBasicInfo(stockInfoRequestURL, ref stockInfo);
+            Utils.parseCompanyProfitSharing(lastProfitSharingRequestURL, ref stockInfo);
 
-            if(stockInfoTableNode != null)
+            if(stockInfo.CompanyName != "")
             {
-                HtmlNode nameNode = stockInfoTableNode.SelectSingleNode("//a[@class='bets-name']");
-                HtmlNode dateNode = stockInfoTableNode.SelectSingleNode("//span[@class='state f-up']");
-                HtmlNode closePriceNode = stockInfoTableNode.SelectSingleNode("//strong[@class='_close']");
-                HtmlNode detailNode = stockInfoTableNode.SelectSingleNode("//div[@class='bets-content']//div");
+                txtCompanyName.Text = stockInfo.CompanyName;
+                txtLastTradingPrice.Text = stockInfo.LastTradingPrice;
+                txtDateOfInfo.Text = stockInfo.DateOfInfo;
+                txtCompanyProfitPerShare.Text = stockInfo.CompanyProfitPerShare;
+                txtPERatio.Text = stockInfo.PERatio;
 
-                txtCompanyName.Text = nameNode.InnerText.Trim();
-                txtLastTradingPrice.Text = closePriceNode.InnerText.Trim();
-                txtDateOfInfo.Text = dateNode.InnerText.Trim().Replace("&nbsp;","");
-                decimal companyProfitPerShare = decimal.Zero;
-                decimal peRatio = decimal.Zero;
-                decimal lastTradingPrice = decimal.Zero;
-                decimal.TryParse(closePriceNode.InnerText.Trim(), out lastTradingPrice);
-                foreach (HtmlNode subNode in detailNode.ChildNodes)
-                {
-                    if (subNode.HasChildNodes)
-                    {
-                        if (subNode.FirstChild.InnerText.Equals("每股收益", StringComparison.CurrentCultureIgnoreCase))
-                        {
-                            decimal.TryParse(subNode.LastChild.InnerText.Trim(), out companyProfitPerShare);
-                        }
-                        else if (subNode.FirstChild.InnerText.Contains("市盈率"))
-                        {
-                            txtPERatio.Text = subNode.LastChild.InnerText.Trim();
-                            decimal.TryParse(subNode.LastChild.InnerText.Trim(), out peRatio);
-                        }
-                        // if failed to parse last trading price (most likely to happen during long holiday), then use previous closing price instead
-                        else if(lastTradingPrice == decimal.Zero && 
-                            subNode.FirstChild.InnerText.Equals("昨收", StringComparison.CurrentCultureIgnoreCase))
-                        {
-                            decimal.TryParse(subNode.LastChild.InnerText.Trim(), out lastTradingPrice);
-                            txtDateOfInfo.Text += "(顺延前一收盘价)";
-                        }
-                    }
-                }
-
-                // Recalculate the profit per share by the past days.
-                // Always use PERatio for bellow calculation if available.
-                if(peRatio > 0)
-                {
-                    companyProfitPerShare = decimal.Round(lastTradingPrice / peRatio * 365M / DateTime.Today.DayOfYear, 4);
-                }
-                else if(companyProfitPerShare > 0)
-                {
-                    companyProfitPerShare = decimal.Round(companyProfitPerShare * 365M / DateTime.Today.DayOfYear, 4);
-                }
-
-                
-                txtCompanyProfitPerShare.Text = Convert.ToString(companyProfitPerShare);
-
-                // Now try to parse profit sharing info
-                foreach(HtmlNode profitSharingTableNode in lastProfitSharingTableNodes)
-                {
-                    HtmlNode tdNode = Utils.findNodeByText(profitSharingTableNode,".//tr/td", "公告日期",1);
-                    string dateString = tdNode.InnerText;
-                    DateTime publishDate = new DateTime();
-                    DateTime.TryParse(dateString, out publishDate);
-                    DateTime currDate = DateTime.Now;
-                    HtmlNode profitSharingNode = Utils.findNodeByText(profitSharingTableNode, ".//tr/td", "每10股现金(含税)",1);
-                    if (publishDate.CompareTo(currDate.AddYears(-1)) > 0 &&
-                        publishDate.CompareTo(currDate) < 0){
-                        txtFirstYearProfitSharing.Text = profitSharingNode.InnerText.Substring(0, profitSharingNode.InnerText.Length -1);
-                    }
-                    else if(publishDate.CompareTo(currDate.AddYears(-2)) > 0 &&
-                        publishDate.CompareTo(currDate.AddYears(-1)) < 0)
-                    {
-                        txtSecondYearProfitSharing.Text = profitSharingNode.InnerText.Substring(0, profitSharingNode.InnerText.Length - 1);
-                    }
-                    else if (publishDate.CompareTo(currDate.AddYears(-3)) > 0 &&
-                        publishDate.CompareTo(currDate.AddYears(-2)) < 0)
-                    {
-                        txtThirdYearProfitSharing.Text = profitSharingNode.InnerText.Substring(0, profitSharingNode.InnerText.Length - 1);
-                    }
-                    else if (publishDate.CompareTo(currDate.AddYears(-4)) > 0 &&
-                        publishDate.CompareTo(currDate.AddYears(-3)) < 0)
-                    {
-                        txtFourthYearProfitSharing.Text = profitSharingNode.InnerText.Substring(0, profitSharingNode.InnerText.Length - 1);
-                    }
-                    else if (publishDate.CompareTo(currDate.AddYears(-5)) > 0 &&
-                        publishDate.CompareTo(currDate.AddYears(-4)) < 0)
-                    {
-                        txtFifthYearProfitSharing.Text = profitSharingNode.InnerText.Substring(0, profitSharingNode.InnerText.Length - 1);
-                    }
-                }
+                txtFirstYearProfitSharing.Text = stockInfo.FirstYearProfitSharing;
+                txtSecondYearProfitSharing.Text = stockInfo.SecondYearProfitSharing;
+                txtThirdYearProfitSharing.Text = stockInfo.ThirdYearProfitSharing;
+                txtFourthYearProfitSharing.Text = stockInfo.FourthYearProfitSharing;
+                txtFifthYearProfitSharing.Text = stockInfo.FifthhYearProfitSharing;
 
                 MessageBox.Show(retrieveStockInfoSuccessMessage);
 
@@ -503,11 +430,11 @@ namespace StockValueCalculator
                 if (checkBoxKeepPreferStockID.Checked)
                 {
                     string persistString = "\n" + originalStockID + ","
-                                                + nameNode.InnerText.Trim() + ","
-                                                + dateNode.InnerText.Trim().Replace("&nbsp;", "") + ","
-                                                + Convert.ToString(lastTradingPrice) + ","
-                                                + Convert.ToString(companyProfitPerShare) + ","
-                                                + Convert.ToString(peRatio) + ","
+                                                + txtCompanyName.Text + ","
+                                                + txtDateOfInfo.Text + ","
+                                                + txtLastTradingPrice.Text + ","
+                                                + txtCompanyProfitPerShare.Text + ","
+                                                + txtPERatio.Text + ","
                                                 + txtFirstYearProfitSharing.Text + ","
                                                 + txtSecondYearProfitSharing.Text + ","
                                                 + txtThirdYearProfitSharing.Text + ","
@@ -524,7 +451,6 @@ namespace StockValueCalculator
             {
                 MessageBox.Show(retrieveStockInfoFailedMessage);
             }
-            
         }
 
         private void tabControl1_DragDrop(object sender, DragEventArgs e)
@@ -541,7 +467,7 @@ namespace StockValueCalculator
                 }
                 else if(tabControl1.SelectedTab == stockMarketPage)
                 {
-
+                    //place holder for implementation of the drag and drop operation in stock market page
                 }
             }
         }
@@ -574,19 +500,20 @@ namespace StockValueCalculator
         {
             int idx = comboBoxStockIDList.SelectedIndex;
             string[] fileContent = File.ReadAllLines(preferStockListFileName);
+            string[] fileContentArray = fileContent[idx].Split(',');
 
-            if(fileContent.Length >= idx)
+            if (fileContent.Length >= idx)
             {
-                txtCompanyName.Text = fileContent[idx].Split(',').Length > 1 ? fileContent[idx].Split(',')[1] : "";
-                txtDateOfInfo.Text = fileContent[idx].Split(',').Length > 2 ? fileContent[idx].Split(',')[2] : "";
-                txtLastTradingPrice.Text = fileContent[idx].Split(',').Length > 3 ? fileContent[idx].Split(',')[3] : "";
-                txtCompanyProfitPerShare.Text = fileContent[idx].Split(',').Length > 4 ? fileContent[idx].Split(',')[4] : "";
-                txtPERatio.Text = fileContent[idx].Split(',').Length > 5 ? fileContent[idx].Split(',')[5] : "";
-                txtFirstYearProfitSharing.Text = fileContent[idx].Split(',').Length > 6 ? fileContent[idx].Split(',')[6] : "";
-                txtSecondYearProfitSharing.Text = fileContent[idx].Split(',').Length > 7 ? fileContent[idx].Split(',')[7] : "";
-                txtThirdYearProfitSharing.Text = fileContent[idx].Split(',').Length > 8 ? fileContent[idx].Split(',')[8] : "";
-                txtFourthYearProfitSharing.Text = fileContent[idx].Split(',').Length > 9 ? fileContent[idx].Split(',')[9] : "";
-                txtFifthYearProfitSharing.Text = fileContent[idx].Split(',').Length > 10 ? fileContent[idx].Split(',')[10] : "";
+                txtCompanyName.Text = Utils.getValueFromArray(fileContentArray, 1);
+                txtDateOfInfo.Text = Utils.getValueFromArray(fileContentArray, 2);
+                txtLastTradingPrice.Text = Utils.getValueFromArray(fileContentArray, 3);
+                txtCompanyProfitPerShare.Text = Utils.getValueFromArray(fileContentArray, 4);
+                txtPERatio.Text = Utils.getValueFromArray(fileContentArray, 5);
+                txtFirstYearProfitSharing.Text = Utils.getValueFromArray(fileContentArray, 6);
+                txtSecondYearProfitSharing.Text = Utils.getValueFromArray(fileContentArray, 7);
+                txtThirdYearProfitSharing.Text = Utils.getValueFromArray(fileContentArray, 8);
+                txtFourthYearProfitSharing.Text = Utils.getValueFromArray(fileContentArray, 9);
+                txtFifthYearProfitSharing.Text = Utils.getValueFromArray(fileContentArray, 10);
             }
         }
     }
