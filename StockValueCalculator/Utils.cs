@@ -165,31 +165,7 @@ namespace StockValueCalculator
                 DateTime.TryParse(tdNode.InnerText.Trim(), out publishDate);
                 HtmlNode profitSharingNode = Utils.findNodeByText(profitSharingTableNode, ".//tr/td", "每10股现金(含税)", 1);
                 string profitSharingNodeText = profitSharingNode.InnerText.Substring(0, profitSharingNode.InnerText.Length - 1);
-                if (publishDate.CompareTo(DateTime.Today.AddYears(-1)) > 0 &&
-                    publishDate.CompareTo(DateTime.Today) < 0)
-                {
-                    stockInfo.FirstYearProfitSharing = profitSharingNodeText;
-                }
-                else if (publishDate.CompareTo(DateTime.Today.AddYears(-2)) > 0 &&
-                    publishDate.CompareTo(DateTime.Today.AddYears(-1)) < 0)
-                {
-                    stockInfo.SecondYearProfitSharing = profitSharingNodeText;
-                }
-                else if (publishDate.CompareTo(DateTime.Today.AddYears(-3)) > 0 &&
-                    publishDate.CompareTo(DateTime.Today.AddYears(-2)) < 0)
-                {
-                    stockInfo.ThirdYearProfitSharing = profitSharingNodeText;
-                }
-                else if (publishDate.CompareTo(DateTime.Today.AddYears(-4)) > 0 &&
-                    publishDate.CompareTo(DateTime.Today.AddYears(-3)) < 0)
-                {
-                    stockInfo.FourthYearProfitSharing = profitSharingNodeText;
-                }
-                else if (publishDate.CompareTo(DateTime.Today.AddYears(-5)) > 0 &&
-                    publishDate.CompareTo(DateTime.Today.AddYears(-4)) < 0)
-                {
-                    stockInfo.FifthhYearProfitSharing = profitSharingNodeText;
-                }
+                stockInfo.ProfitSharingDictionary.Add(publishDate, profitSharingNodeText);
             }
         }
 

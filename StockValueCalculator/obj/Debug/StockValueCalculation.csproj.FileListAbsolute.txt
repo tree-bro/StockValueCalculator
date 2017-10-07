@@ -18,7 +18,6 @@ F:\hx\source\StockValueCalculator\StockValueCalculator\obj\Debug\StockValueCalcu
 F:\hx\source\StockValueCalculator\StockValueCalculator\obj\Debug\StockValueCalculation.csproj.CoreCompileInputs.cache
 F:\hx\source\StockValueCalculator\StockValueCalculator\obj\Debug\StockValueCalculator.exe
 F:\hx\source\StockValueCalculator\StockValueCalculator\obj\Debug\StockValueCalculator.pdb
-F:\hx\source\StockValueCalculator\StockValueCalculator\obj\Debug\StockValueCalculation.csprojResolveAssemblyReference.cache
 E:\hx\source\StockValueCalculator\StockValueCalculator\bin\Debug\HtmlAgilityPack.dll
 E:\hx\source\StockValueCalculator\StockValueCalculator\bin\Debug\HtmlAgilityPack.pdb
 E:\hx\source\StockValueCalculator\StockValueCalculator\bin\Debug\HtmlAgilityPack.xml

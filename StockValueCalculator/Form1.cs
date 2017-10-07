@@ -251,62 +251,26 @@ namespace StockValueCalculator
         private void parseInputParametersFromFile(string line)
         {
             string[] splitLines = line.Trim().Split(',');
-            if(splitLines.Length < 2)
-            {
-                return;
-            }
+            if (splitLines.Length < 2) return;
+            string fieldName = splitLines[0].Trim().ToLowerInvariant();
+            string fieldValue = splitLines[1].Trim();
 
-            if(splitLines[0].Trim().Equals("market price", StringComparison.CurrentCultureIgnoreCase))
+            Control.ControlCollection controlCollection = this.tabControl1.GetControl(0).Controls;
+            CompanyFileInfo companyFileInfo = new CompanyFileInfo();
+
+            // Form -> tabControl -> GroupBoxs -> TextBoxs
+            foreach(Control control in this.tabControl1.GetControl(0).Controls)
             {
-                txtMarketPrice.Text = splitLines[1].Trim();
-            }
-            else if(splitLines[0].Trim().Equals("trading tax rate %", StringComparison.CurrentCultureIgnoreCase))
-            {
-                txtTradeTaxRate.Text = splitLines[1].Trim();
-            }
-            else if(splitLines[0].Trim().Equals("profit per share", StringComparison.CurrentCultureIgnoreCase))
-            {
-                txtProfitPerShare.Text = splitLines[1].Trim();
-            }
-            else if(splitLines[0].Trim().Equals("profit sharing rate %", StringComparison.CurrentCultureIgnoreCase))
-            {
-                txtProfitSharingRate.Text = splitLines[1].Trim();
-            }
-            else if(splitLines[0].Trim().Equals("company duration", StringComparison.CurrentCultureIgnoreCase))
-            {
-                txtCompanyDuration.Text = splitLines[1].Trim();
-            }
-            else if(splitLines[0].Trim().Equals("discount rate %", StringComparison.CurrentCultureIgnoreCase))
-            {
-                txtDiscountRate.Text = splitLines[1].Trim();
-            }
-            else if(splitLines[0].Trim().Equals("normal growth rate %", StringComparison.CurrentCultureIgnoreCase))
-            {
-                txtNormalGrowthRate.Text = splitLines[1].Trim();
-            }
-            else if(splitLines[0].Trim().Equals("high speed growth rate %", StringComparison.CurrentCultureIgnoreCase))
-            {
-                txtHighSpeedGrowthRate.Text = splitLines[1].Trim();
-            }
-            else if(splitLines[0].Trim().Equals("high speed growth duration", StringComparison.CurrentCultureIgnoreCase))
-            {
-                txtHighSpeedGrowthDuration.Text = splitLines[1].Trim();
-            }
-            else if(splitLines[0].Trim().Equals("profit sharing tax rate %", StringComparison.CurrentCultureIgnoreCase))
-            {
-                txtProfitSharingTax.Text = splitLines[1].Trim();
-            }
-            else if(splitLines[0].Trim().Equals("depression frequency", StringComparison.CurrentCultureIgnoreCase))
-            {
-                txtDepressionFrequency.Text = splitLines[1].Trim();
-            }
-            else if(splitLines[0].Trim().Equals("depression loss rate %", StringComparison.CurrentCultureIgnoreCase))
-            {
-                txtDepressionLossRate.Text = splitLines[1].Trim();
-            }
-            else if(splitLines[0].Trim().Equals("stock held duration", StringComparison.CurrentCultureIgnoreCase))
-            {
-                txtStockHeldDuration.Text = splitLines[1].Trim();
+                if(control.GetType() == typeof(GroupBox))
+                {
+                    foreach(Control subControl in control.Controls)
+                    {
+                        if (companyFileInfo.getControlName(fieldName) == subControl.Name)
+                        {
+                            subControl.Text = fieldValue;
+                        }
+                    }
+                }
             }
         }
 
@@ -418,11 +382,11 @@ namespace StockValueCalculator
                 txtCompanyProfitPerShare.Text = stockInfo.CompanyProfitPerShare;
                 txtPERatio.Text = stockInfo.PERatio;
 
-                txtFirstYearProfitSharing.Text = stockInfo.FirstYearProfitSharing;
-                txtSecondYearProfitSharing.Text = stockInfo.SecondYearProfitSharing;
-                txtThirdYearProfitSharing.Text = stockInfo.ThirdYearProfitSharing;
-                txtFourthYearProfitSharing.Text = stockInfo.FourthYearProfitSharing;
-                txtFifthYearProfitSharing.Text = stockInfo.FifthhYearProfitSharing;
+                txtFirstYearProfitSharing.Text = Convert.ToString(stockInfo.getProfitSharingInLastYear(-1));
+                txtSecondYearProfitSharing.Text = Convert.ToString(stockInfo.getProfitSharingInLastYear(-2));
+                txtThirdYearProfitSharing.Text = Convert.ToString(stockInfo.getProfitSharingInLastYear(-3));
+                txtFourthYearProfitSharing.Text = Convert.ToString(stockInfo.getProfitSharingInLastYear(-4));
+                txtFifthYearProfitSharing.Text = Convert.ToString(stockInfo.getProfitSharingInLastYear(-5));
 
                 MessageBox.Show(retrieveStockInfoSuccessMessage);
 

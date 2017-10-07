@@ -13,12 +13,31 @@ namespace StockValueCalculator
         public string DateOfInfo { get; set; }
         public string CompanyProfitPerShare { get; set; }
         public string PERatio { get; set; }
-        public string FirstYearProfitSharing { get; set; }
-        public string SecondYearProfitSharing { get; set; }
-        public string ThirdYearProfitSharing { get; set; }
-        public string FourthYearProfitSharing { get; set; }
-        public string FifthhYearProfitSharing { get; set; }
 
+        public Dictionary<DateTime,string> ProfitSharingDictionary { get; set; }
+
+        public StockInfo()
+        {
+            this.ProfitSharingDictionary = new Dictionary<DateTime, string>();
+        }
+
+        public decimal getProfitSharingInLastYear(int offset)
+        {
+            decimal totalProfitSharing = decimal.Zero;
+            foreach(DateTime publishDate in ProfitSharingDictionary.Keys)
+            {
+                if(publishDate.CompareTo(DateTime.Today.AddYears(offset)) > 0 &&
+                    publishDate.CompareTo(DateTime.Today.AddYears(offset+1)) < 0)
+                {
+                    decimal tempProfitSharing = decimal.Zero;
+                    decimal.TryParse(ProfitSharingDictionary[publishDate], out tempProfitSharing);
+
+                    totalProfitSharing += tempProfitSharing;
+                }
+            }
+
+            return totalProfitSharing;
+        }
 
     }
 }
