@@ -62,16 +62,27 @@ namespace StockValueCalculator
             return resultList.ToArray();
         }
 
-        public static HtmlNode findNodeByText(HtmlNode parentNode, string xpath, string compareValue, int offset)
+        public static HtmlNode findNodeByText(HtmlNode parentNode, string xpath, string compareValue, int offset, bool exactMatch)
         {
             int count = 0;
             bool foundMatch = false;
             foreach (HtmlNode subNode in parentNode.SelectNodes(xpath))
             {
-                if (subNode.InnerText.Equals(compareValue, System.StringComparison.CurrentCultureIgnoreCase))
+                if (exactMatch)
                 {
-                    foundMatch = true;
+                    if (subNode.InnerText.Equals(compareValue, System.StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        foundMatch = true;
+                    }
                 }
+                else
+                {
+                    if (subNode.InnerText.Contains(compareValue))
+                    {
+                        foundMatch = true;
+                    }
+                }
+                
                 if (foundMatch)
                 {
                     if(count == offset)
@@ -148,7 +159,31 @@ namespace StockValueCalculator
 
                 stockInfo.CompanyProfitPerShare = Convert.ToString(companyProfitPerShare);
             }
-         }
+        }
+
+        public static void parseCompanyProfitPerShare(string url, ref StockInfo stockInfo)
+        {
+            // The following is to parse more accurate company profit per share from ifeng api.
+            HtmlAgilityPack.HtmlDocument ProfitPerShareHtmlDocument = Utils.loadHtmlDocument(url, Encoding.GetEncoding("utf-8"));
+
+            HtmlNode stockInfoTableNode = ProfitPerShareHtmlDocument.DocumentNode.SelectSingleNode("//table[@class='tab01 cDGray']");
+
+            if (stockInfoTableNode != null)
+            {
+                for (int idx = 5; idx > 0; idx--)
+                {
+                    HtmlNode dateTdNode = Utils.findNodeByText(stockInfoTableNode, ".//tr/td", "截止日期", idx, false);
+                    DateTime publishDate = new DateTime();
+                    DateTime.TryParse(dateTdNode.InnerText.Trim(), out publishDate);
+                    if (publishDate.Equals(DateTime.Today.AddDays(-DateTime.Today.DayOfYear)))
+                    {
+                        HtmlNode profitPerShareNode = Utils.findNodeByText(stockInfoTableNode, ".//tr/td", "每股收益(元)", idx, false);
+                        stockInfo.CompanyProfitPerShare = profitPerShareNode.InnerText;
+                        break;
+                    }
+                }
+            }
+        }
 
         public static void parseCompanyProfitSharing(string url, ref StockInfo stockInfo)
         {
@@ -158,14 +193,17 @@ namespace StockValueCalculator
 
             HtmlNodeCollection lastProfitSharingTableNodes = lastProfitSharingHtmlDocument.DocumentNode.SelectNodes("//table[@class='tab01']");
 
-            foreach (HtmlNode profitSharingTableNode in lastProfitSharingTableNodes)
+            if(lastProfitSharingTableNodes != null)
             {
-                HtmlNode tdNode = Utils.findNodeByText(profitSharingTableNode, ".//tr/td", "公告日期", 1);
-                DateTime publishDate = new DateTime();
-                DateTime.TryParse(tdNode.InnerText.Trim(), out publishDate);
-                HtmlNode profitSharingNode = Utils.findNodeByText(profitSharingTableNode, ".//tr/td", "每10股现金(含税)", 1);
-                string profitSharingNodeText = profitSharingNode.InnerText.Substring(0, profitSharingNode.InnerText.Length - 1);
-                stockInfo.ProfitSharingDictionary.Add(publishDate, profitSharingNodeText);
+                foreach (HtmlNode profitSharingTableNode in lastProfitSharingTableNodes)
+                {
+                    HtmlNode tdNode = Utils.findNodeByText(profitSharingTableNode, ".//tr/td", "公告日期", 1, true);
+                    DateTime publishDate = new DateTime();
+                    DateTime.TryParse(tdNode.InnerText.Trim(), out publishDate);
+                    HtmlNode profitSharingNode = Utils.findNodeByText(profitSharingTableNode, ".//tr/td", "每10股现金(含税)", 1, true);
+                    string profitSharingNodeText = profitSharingNode.InnerText.Substring(0, profitSharingNode.InnerText.Length - 1);
+                    stockInfo.addProfitSharingInfo(publishDate, profitSharingNodeText);
+                }
             }
         }
 

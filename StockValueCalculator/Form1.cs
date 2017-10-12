@@ -104,6 +104,7 @@ namespace StockValueCalculator
                 groupBoxForManualInputParams.Text = ConfigurationManager.AppSettings.Get("groupBoxForManualInputParams_zh");
 
                 checkBoxKeepPreferStockID.Text = ConfigurationManager.AppSettings.Get("checkBoxKeepPreferStockID_zh");
+                checkBoxUsePreviousProfit.Text = ConfigurationManager.AppSettings.Get("checkBoxUsePreviousProfit_zh");
 
                 successMessage = PromptMessages.successMessageZH;
                 parseCompanyDetailsFormatError = PromptMessages.parseCompanyDetailsFormatErrorZH;
@@ -139,6 +140,7 @@ namespace StockValueCalculator
         private void setStockInfoInitValues()
         {
             checkBoxKeepPreferStockID.Checked = Convert.ToBoolean(ConfigurationManager.AppSettings.Get("initValueKeepPreferStockList"));
+            checkBoxUsePreviousProfit.Checked = Convert.ToBoolean(ConfigurationManager.AppSettings.Get("initValueUsePreviousProfit"));
             comboBoxStockIDList.Items.AddRange(Utils.readPreferStockIDList());
         }
         #endregion
@@ -367,12 +369,18 @@ namespace StockValueCalculator
         private void retrieveStockInfoByID(string originalStockID, string stockID)
         {
             string stockInfoRequestURL = URLTemplates.baiduTemplateByID.Replace("[_STOCK_ID_]", stockID);
+            string profitPerShareRequestURL = URLTemplates.ifengCaiWuTemplateByID.Replace("[_STOCK_ID_]", originalStockID);
             string lastProfitSharingRequestURL = URLTemplates.ifengProfitSharingTemplateByID.Replace("[_STOCK_ID_]", originalStockID);
 
             StockInfo stockInfo = new StockInfo();
 
             Utils.parseCompanyBasicInfo(stockInfoRequestURL, ref stockInfo);
             Utils.parseCompanyProfitSharing(lastProfitSharingRequestURL, ref stockInfo);
+
+            if (checkBoxUsePreviousProfit.Checked)
+            {
+                Utils.parseCompanyProfitPerShare(profitPerShareRequestURL, ref stockInfo);
+            }
 
             if(stockInfo.CompanyName != "")
             {
