@@ -1,3 +1,9 @@
 #Place holder for gitignore settings
 __pycache__
 packages
+*.dll
+*.exe
+*.pdb
+*.lock
+*.cache
+*.ide

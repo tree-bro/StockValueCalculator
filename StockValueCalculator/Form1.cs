@@ -305,7 +305,7 @@ namespace StockValueCalculator
             if (!txtCompanyName.Text.Trim().Equals(""))
             {
                 txtMarketPrice.Text = txtLastTradingPrice.Text;
-                txtProfitPerShare.Text = txtCompanyProfitPerShare.Text;
+                //txtProfitPerShare.Text = txtCompanyProfitPerShare.Text;
 
                 decimal firstYearProfitSharing = decimal.Zero;
                 decimal secondYearProfitSharing = decimal.Zero;
@@ -326,7 +326,26 @@ namespace StockValueCalculator
                 {
                     decimal companyProfitPerShare = decimal.Zero;
                     decimal.TryParse(txtCompanyProfitPerShare.Text, out companyProfitPerShare);
-                    txtProfitSharingRate.Text = Convert.ToString(decimal.Round(profitSharingPerShare / companyProfitPerShare, 4) * 100);
+                    decimal peRatio = decimal.Zero;
+                    decimal.TryParse(txtPERatio.Text, out peRatio);
+                    decimal marketPrice = decimal.Zero;
+                    decimal.TryParse(txtMarketPrice.Text, out marketPrice);
+                    
+                    //handle non-exist profit per share case
+                    if(companyProfitPerShare == 0m)
+                    {
+                        //if pe ratio exists, then use pe ratio to calculate the profit per share, otherwise skip the calculation of profit sharing rate
+                        if(peRatio != 0m)
+                        {
+                            txtProfitSharingRate.Text = Convert.ToString(decimal.Round(profitSharingPerShare / decimal.Round(marketPrice / peRatio, 4), 4) * 100);
+                            txtProfitPerShare.Text = Convert.ToString(decimal.Round(marketPrice / peRatio, 4));
+                        }
+                    }
+                    else
+                    {
+                        txtProfitSharingRate.Text = Convert.ToString(decimal.Round(profitSharingPerShare / companyProfitPerShare, 4) * 100);
+                        txtProfitPerShare.Text = Convert.ToString(companyProfitPerShare);
+                    }
                 }
 
                 MessageBox.Show(parseCompanyDetailsFromServerSuccessMessage.Replace("[_COMPANY_NAME_]", txtCompanyName.Text.Trim()));
