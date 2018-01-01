@@ -57,6 +57,8 @@ namespace StockValueCalculator
             setLanguagePreference();
             setCalculationInitValues();
             setStockInfoInitValues();
+
+            
         }
 
         #region "language preference"
@@ -145,56 +147,70 @@ namespace StockValueCalculator
         }
         #endregion
 
+        /// <summary>
+        /// Change the calculation process to be handled in background thread
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnCalculate_Click(object sender, EventArgs e)
         {
-            //Retrieve input params.
-            parseInputParameters();
+            System.Threading.ThreadPool.QueueUserWorkItem(o=> {
+                //Retrieve input params.
+                parseInputParameters();
 
-            //Declare temp variables for calculation
-            resetTempCalVariables();
+                //Declare temp variables for calculation
+                resetTempCalVariables();
 
-            for (var idx = 1; idx <= companyDuration; idx++) {
-                //calculate the risk interest rate for current year
-                currentInterest = currentInterest * (decimal.One / (decimal.One + discountRate));
-
-                //If HSG is larger than 0, and current year has not reach the upper limit for HSG, then calculate for HSG
-                if (highSpeedGrowthRate > 0 && highSpeedGrwothDuration >= idx) {
-                    currentGrowth = currentGrowth * (decimal.One + highSpeedGrowthRate);
-                } else {
-                    currentGrowth = currentGrowth * (decimal.One + normalGrowthRate);
-                }
-
-                if (idx % depressionFrequency > 0)
+                for (var idx = 1; idx <= companyDuration; idx++)
                 {
-                    totalProfitSharing = totalProfitSharing + currentInterest * profitPerShare * currentGrowth * profitSharingRate * (decimal.One - profitSharingTaxRate);
-                    totalTradingTaxPaid = totalTradingTaxPaid + currentInterest * profitPerShare * currentGrowth * profitSharingRate * profitSharingTaxRate;
-                    totalInnerValue = totalInnerValue + currentInterest * profitPerShare * currentGrowth * (1 - profitSharingRate);
-                    resultForSell = resultForSell + profitPerShare * currentGrowth * (1 - profitSharingRate);
-                } else {
-                    totalProfitSharing = totalProfitSharing + currentInterest * profitPerShare * currentGrowth * profitSharingRate * (decimal.One - profitSharingTaxRate) * (decimal.One - depressionLossRate);
-                    totalTradingTaxPaid = totalTradingTaxPaid + currentInterest * profitPerShare * currentGrowth * profitSharingRate * profitSharingTaxRate * (decimal.One - depressionLossRate);
-                    totalInnerValue = totalInnerValue + currentInterest * profitPerShare * currentGrowth * (decimal.One - profitSharingRate) * (decimal.One - depressionLossRate);
-                    resultForSell = resultForSell + profitPerShare * currentGrowth * (decimal.One - profitSharingRate) * (decimal.One - depressionLossRate);
+                    //calculate the risk interest rate for current year
+                    currentInterest = currentInterest * (decimal.One / (decimal.One + discountRate));
+
+                    //If HSG is larger than 0, and current year has not reach the upper limit for HSG, then calculate for HSG
+                    if (highSpeedGrowthRate > 0 && highSpeedGrwothDuration >= idx)
+                    {
+                        currentGrowth = currentGrowth * (decimal.One + highSpeedGrowthRate);
+                    }
+                    else
+                    {
+                        currentGrowth = currentGrowth * (decimal.One + normalGrowthRate);
+                    }
+
+                    if (idx % depressionFrequency > 0)
+                    {
+                        totalProfitSharing = totalProfitSharing + currentInterest * profitPerShare * currentGrowth * profitSharingRate * (decimal.One - profitSharingTaxRate);
+                        totalTradingTaxPaid = totalTradingTaxPaid + currentInterest * profitPerShare * currentGrowth * profitSharingRate * profitSharingTaxRate;
+                        totalInnerValue = totalInnerValue + currentInterest * profitPerShare * currentGrowth * (1 - profitSharingRate);
+                        resultForSell = resultForSell + profitPerShare * currentGrowth * (1 - profitSharingRate);
+                    }
+                    else
+                    {
+                        totalProfitSharing = totalProfitSharing + currentInterest * profitPerShare * currentGrowth * profitSharingRate * (decimal.One - profitSharingTaxRate) * (decimal.One - depressionLossRate);
+                        totalTradingTaxPaid = totalTradingTaxPaid + currentInterest * profitPerShare * currentGrowth * profitSharingRate * profitSharingTaxRate * (decimal.One - depressionLossRate);
+                        totalInnerValue = totalInnerValue + currentInterest * profitPerShare * currentGrowth * (decimal.One - profitSharingRate) * (decimal.One - depressionLossRate);
+                        resultForSell = resultForSell + profitPerShare * currentGrowth * (decimal.One - profitSharingRate) * (decimal.One - depressionLossRate);
+                    }
+
+                    if (stockHeldDuration > 0 && idx % stockHeldDuration == 0)
+                    {
+                        totalBuyTax = totalBuyTax + marketPrice * (decimal.One + idx * assumedStockPriceGrowth) * tradingTaxRate * currentInterest;
+                        totalSellTax = totalSellTax + marketPrice * (decimal.One + idx * assumedStockPriceGrowth) * tradingTaxRate * currentInterest;
+                    }
                 }
+                totalSellTax = totalSellTax + resultForSell * currentInterest * tradingTaxRate;
 
-                if (stockHeldDuration > 0 && idx % stockHeldDuration == 0) {
-                    totalBuyTax = totalBuyTax + marketPrice * (decimal.One + idx * assumedStockPriceGrowth) * tradingTaxRate * currentInterest;
-                    totalSellTax = totalSellTax + marketPrice * (decimal.One + idx * assumedStockPriceGrowth) * tradingTaxRate * currentInterest;
-                }
-            }
-            totalSellTax = totalSellTax + resultForSell * currentInterest * tradingTaxRate;
+                string displaySuccessMessage = successMessage
+                                                    .Replace("[_MARKET_PRICE_]", Convert.ToString(decimal.Round(marketPrice, 5)))
+                                                    .Replace("[_INNER_VALUE_DEDUCT_PROFIT_SHARING_]", Convert.ToString(decimal.Round(totalInnerValue, 5)))
+                                                    .Replace("[_PROFIT_SHARING_]", Convert.ToString(decimal.Round(totalProfitSharing, 5)))
+                                                    .Replace("[_TRADING_TAX_PAID_]", Convert.ToString(decimal.Round(totalTradingTaxPaid, 5)))
+                                                    .Replace("[_BUY_TAX_PAID_]", Convert.ToString(decimal.Round(totalBuyTax, 5)))
+                                                    .Replace("[_SELL_TAX_PAID_]", Convert.ToString(decimal.Round(totalSellTax, 5)))
+                                                    .Replace("[_INNER_VALUE_]", Convert.ToString(decimal.Round(totalInnerValue + totalProfitSharing - totalBuyTax - totalSellTax - totalTradingTaxPaid, 5)))
+                                                    .Replace("[_MARKET_PRICE_TO_INNER_VALUE_]", Convert.ToString(decimal.Round(marketPrice / (totalInnerValue + totalProfitSharing - totalBuyTax - totalSellTax - totalTradingTaxPaid) * 100, 5)));
 
-            string displaySuccessMessage = successMessage
-                                                .Replace("[_MARKET_PRICE_]", Convert.ToString(decimal.Round(marketPrice, 5)))
-                                                .Replace("[_INNER_VALUE_DEDUCT_PROFIT_SHARING_]", Convert.ToString(decimal.Round(totalInnerValue, 5)))
-                                                .Replace("[_PROFIT_SHARING_]", Convert.ToString(decimal.Round(totalProfitSharing, 5)))
-                                                .Replace("[_TRADING_TAX_PAID_]", Convert.ToString(decimal.Round(totalTradingTaxPaid, 5)))
-                                                .Replace("[_BUY_TAX_PAID_]", Convert.ToString(decimal.Round(totalBuyTax, 5)))
-                                                .Replace("[_SELL_TAX_PAID_]",Convert.ToString(decimal.Round(totalSellTax, 5)))
-                                                .Replace("[_INNER_VALUE_]", Convert.ToString(decimal.Round(totalInnerValue + totalProfitSharing - totalBuyTax - totalSellTax - totalTradingTaxPaid, 5)))
-                                                .Replace("[_MARKET_PRICE_TO_INNER_VALUE_]", Convert.ToString(decimal.Round(marketPrice / (totalInnerValue + totalProfitSharing - totalBuyTax - totalSellTax - totalTradingTaxPaid) * 100, 5)));
-
-            MessageBox.Show(displaySuccessMessage, "Calculation Result");
+                MessageBox.Show(displaySuccessMessage, "Calculation Result");
+            });
         }
 
         #region "Reset variables"
@@ -286,77 +302,83 @@ namespace StockValueCalculator
 
         private void parseCompanyDetailsFromFile(string filePath)
         {
-            if (!filePath.EndsWith(".csv"))
-            {
-                MessageBox.Show(parseCompanyDetailsFormatError, "File Format Error");
-                return;
-            }
+            System.Threading.ThreadPool.QueueUserWorkItem(o=> {
+                if (!filePath.EndsWith(".csv"))
+                {
+                    MessageBox.Show(parseCompanyDetailsFormatError, "File Format Error");
+                    return;
+                }
 
-            foreach (string line in File.ReadAllLines(filePath))
-            {
-                parseInputParametersFromFile(line);
-            }
+                foreach (string line in File.ReadAllLines(filePath))
+                {
+                    parseInputParametersFromFile(line);
+                }
 
-            MessageBox.Show(parseCompanyDetailsSuccessMessage.Replace("[_FILE_PATH_]", filePath));
+                MessageBox.Show(parseCompanyDetailsSuccessMessage.Replace("[_FILE_PATH_]", filePath));
+            });
+            
         }
 
         private void btnParseCompanyDetailsFromServer_Click(object sender, EventArgs e)
         {
-            if (!txtCompanyName.Text.Trim().Equals(""))
-            {
-                txtMarketPrice.Text = txtLastTradingPrice.Text;
-                //txtProfitPerShare.Text = txtCompanyProfitPerShare.Text;
-
-                decimal firstYearProfitSharing = decimal.Zero;
-                decimal secondYearProfitSharing = decimal.Zero;
-                decimal thirdYearProfitSharing = decimal.Zero;
-                decimal fourthYearProfitSharing = decimal.Zero;
-                decimal fifthYearProfitSharing = decimal.Zero;
-
-                decimal.TryParse(txtFirstYearProfitSharing.Text, out firstYearProfitSharing);
-                decimal.TryParse(txtSecondYearProfitSharing.Text, out secondYearProfitSharing);
-                decimal.TryParse(txtThirdYearProfitSharing.Text, out thirdYearProfitSharing);
-                decimal.TryParse(txtFourthYearProfitSharing.Text, out fourthYearProfitSharing);
-                decimal.TryParse(txtFifthYearProfitSharing.Text, out fifthYearProfitSharing);
-
-                decimal profitSharingPerShare = (firstYearProfitSharing + secondYearProfitSharing +
-                                                    thirdYearProfitSharing + fourthYearProfitSharing +
-                                                    fifthYearProfitSharing) / 50;
-                if (profitSharingPerShare > decimal.Zero)
+            System.Threading.ThreadPool.QueueUserWorkItem(o => {
+                if (!txtCompanyName.Text.Trim().Equals(""))
                 {
-                    decimal companyProfitPerShare = decimal.Zero;
-                    decimal.TryParse(txtCompanyProfitPerShare.Text, out companyProfitPerShare);
-                    decimal peRatio = decimal.Zero;
-                    decimal.TryParse(txtPERatio.Text, out peRatio);
-                    decimal marketPrice = decimal.Zero;
-                    decimal.TryParse(txtMarketPrice.Text, out marketPrice);
-                    
-                    //handle non-exist profit per share case
-                    if(companyProfitPerShare == 0m)
+                    txtMarketPrice.Text = txtLastTradingPrice.Text;
+                    //txtProfitPerShare.Text = txtCompanyProfitPerShare.Text;
+
+                    decimal firstYearProfitSharing = decimal.Zero;
+                    decimal secondYearProfitSharing = decimal.Zero;
+                    decimal thirdYearProfitSharing = decimal.Zero;
+                    decimal fourthYearProfitSharing = decimal.Zero;
+                    decimal fifthYearProfitSharing = decimal.Zero;
+
+                    decimal.TryParse(txtFirstYearProfitSharing.Text, out firstYearProfitSharing);
+                    decimal.TryParse(txtSecondYearProfitSharing.Text, out secondYearProfitSharing);
+                    decimal.TryParse(txtThirdYearProfitSharing.Text, out thirdYearProfitSharing);
+                    decimal.TryParse(txtFourthYearProfitSharing.Text, out fourthYearProfitSharing);
+                    decimal.TryParse(txtFifthYearProfitSharing.Text, out fifthYearProfitSharing);
+
+                    decimal profitSharingPerShare = (firstYearProfitSharing + secondYearProfitSharing +
+                                                        thirdYearProfitSharing + fourthYearProfitSharing +
+                                                        fifthYearProfitSharing) / 50;
+                    if (profitSharingPerShare > decimal.Zero)
                     {
-                        //if pe ratio exists, then use pe ratio to calculate the profit per share, otherwise skip the calculation of profit sharing rate
-                        if(peRatio != 0m)
+                        decimal companyProfitPerShare = decimal.Zero;
+                        decimal.TryParse(txtCompanyProfitPerShare.Text, out companyProfitPerShare);
+                        decimal peRatio = decimal.Zero;
+                        decimal.TryParse(txtPERatio.Text, out peRatio);
+                        decimal marketPrice = decimal.Zero;
+                        decimal.TryParse(txtMarketPrice.Text, out marketPrice);
+
+                        //handle non-exist profit per share case
+                        if (companyProfitPerShare == 0m)
                         {
-                            txtProfitSharingRate.Text = Convert.ToString(decimal.Round(profitSharingPerShare / decimal.Round(marketPrice / peRatio, 4), 4) * 100);
-                            txtProfitPerShare.Text = Convert.ToString(decimal.Round(marketPrice / peRatio, 4));
+                            //if pe ratio exists, then use pe ratio to calculate the profit per share, otherwise skip the calculation of profit sharing rate
+                            if (peRatio != 0m)
+                            {
+                                txtProfitSharingRate.Text = Convert.ToString(decimal.Round(profitSharingPerShare / decimal.Round(marketPrice / peRatio, 4), 4) * 100);
+                                txtProfitPerShare.Text = Convert.ToString(decimal.Round(marketPrice / peRatio, 4));
+                            }
+                        }
+                        else
+                        {
+                            txtProfitSharingRate.Text = Convert.ToString(decimal.Round(profitSharingPerShare / companyProfitPerShare, 4) * 100);
+                            txtProfitPerShare.Text = Convert.ToString(companyProfitPerShare);
                         }
                     }
-                    else
-                    {
-                        txtProfitSharingRate.Text = Convert.ToString(decimal.Round(profitSharingPerShare / companyProfitPerShare, 4) * 100);
-                        txtProfitPerShare.Text = Convert.ToString(companyProfitPerShare);
-                    }
+
+                    MessageBox.Show(parseCompanyDetailsFromServerSuccessMessage.Replace("[_COMPANY_NAME_]", txtCompanyName.Text.Trim()));
+
+                    tabControl1.SelectTab(calculationPage);
+                    resetStockInfoPageParameters();
                 }
-
-                MessageBox.Show(parseCompanyDetailsFromServerSuccessMessage.Replace("[_COMPANY_NAME_]", txtCompanyName.Text.Trim()));
-
-                tabControl1.SelectTab(calculationPage);
-                resetStockInfoPageParameters();
-            }
-            else
-            {
-                MessageBox.Show(parseCompanyDetailsFromServerError);
-            }
+                else
+                {
+                    MessageBox.Show(parseCompanyDetailsFromServerError);
+                }
+            });
+            
             
         }
 
@@ -385,62 +407,88 @@ namespace StockValueCalculator
             
         }
 
+        /// <summary>
+        /// Change the stock info retrieving process to be handled in background thread
+        /// </summary>
+        /// <param name="originalStockID"></param>
+        /// <param name="stockID"></param>
         private void retrieveStockInfoByID(string originalStockID, string stockID)
         {
-            string stockInfoRequestURL = URLTemplates.baiduTemplateByID.Replace("[_STOCK_ID_]", stockID);
-            string profitPerShareRequestURL = URLTemplates.ifengCaiWuTemplateByID.Replace("[_STOCK_ID_]", originalStockID);
-            string lastProfitSharingRequestURL = URLTemplates.ifengProfitSharingTemplateByID.Replace("[_STOCK_ID_]", originalStockID);
+            ProgressBarForm pbf = new ProgressBarForm(this.Location.X + 100, this.Location.Y + 300, "Retrieving Stock Info");
+            pbf.StartProgressBar();
 
-            StockInfo stockInfo = new StockInfo();
+            System.Threading.ThreadPool.QueueUserWorkItem(o => {
+                string stockInfoRequestURL = URLTemplates.baiduTemplateByID.Replace("[_STOCK_ID_]", stockID);
+                string profitPerShareRequestURL = URLTemplates.ifengCaiWuTemplateByID.Replace("[_STOCK_ID_]", originalStockID);
+                string lastProfitSharingRequestURL = URLTemplates.ifengProfitSharingTemplateByID.Replace("[_STOCK_ID_]", originalStockID);
 
-            Utils.parseCompanyBasicInfo(stockInfoRequestURL, ref stockInfo);
-            Utils.parseCompanyProfitSharing(lastProfitSharingRequestURL, ref stockInfo);
+                StockInfo stockInfo = new StockInfo();
 
-            if (checkBoxUsePreviousProfit.Checked)
-            {
-                Utils.parseCompanyProfitPerShare(profitPerShareRequestURL, ref stockInfo);
-            }
+                Utils.parseCompanyBasicInfo(stockInfoRequestURL, ref stockInfo);
+                Utils.parseCompanyProfitSharing(lastProfitSharingRequestURL, ref stockInfo);
 
-            if(stockInfo.CompanyName != "")
-            {
-                txtCompanyName.Text = stockInfo.CompanyName;
-                txtLastTradingPrice.Text = stockInfo.LastTradingPrice;
-                txtDateOfInfo.Text = stockInfo.DateOfInfo;
-                txtCompanyProfitPerShare.Text = stockInfo.CompanyProfitPerShare;
-                txtPERatio.Text = stockInfo.PERatio;
-
-                txtFirstYearProfitSharing.Text = Convert.ToString(stockInfo.getProfitSharingInLastYear(-1));
-                txtSecondYearProfitSharing.Text = Convert.ToString(stockInfo.getProfitSharingInLastYear(-2));
-                txtThirdYearProfitSharing.Text = Convert.ToString(stockInfo.getProfitSharingInLastYear(-3));
-                txtFourthYearProfitSharing.Text = Convert.ToString(stockInfo.getProfitSharingInLastYear(-4));
-                txtFifthYearProfitSharing.Text = Convert.ToString(stockInfo.getProfitSharingInLastYear(-5));
-
-                MessageBox.Show(retrieveStockInfoSuccessMessage);
-
-                // Persist new company info after successfully retrieved
-                if (checkBoxKeepPreferStockID.Checked)
+                if (checkBoxUsePreviousProfit.Checked)
                 {
-                    string persistString = "\n" + originalStockID + ","
-                                                + txtCompanyName.Text + ","
-                                                + txtDateOfInfo.Text + ","
-                                                + txtLastTradingPrice.Text + ","
-                                                + txtCompanyProfitPerShare.Text + ","
-                                                + txtPERatio.Text + ","
-                                                + txtFirstYearProfitSharing.Text + ","
-                                                + txtSecondYearProfitSharing.Text + ","
-                                                + txtThirdYearProfitSharing.Text + ","
-                                                + txtFourthYearProfitSharing.Text + ","
-                                                + txtFifthYearProfitSharing.Text;
-                    if (!File.Exists(preferStockListFileName) || !File.ReadAllText(preferStockListFileName).Contains(persistString))
-                    {
-                        File.AppendAllText(preferStockListFileName, persistString);
-                    }                  
-                    comboBoxStockIDList.Items.Clear();
-                    comboBoxStockIDList.Items.AddRange(Utils.readPreferStockIDList());
+                    Utils.parseCompanyProfitPerShare(profitPerShareRequestURL, ref stockInfo);
                 }
-            } else
+
+                pbf.StopProgressBar();
+                if (stockInfo.CompanyName != "")
+                {
+                    this.SetCompanyName(stockInfo.CompanyName);
+                    this.SetLastTradingPrice(stockInfo.LastTradingPrice);
+                    this.SetDateOfInfo(stockInfo.DateOfInfo);
+                    this.SetCompanyProfitPerShare(stockInfo.CompanyProfitPerShare);
+                    this.SetPERatio(stockInfo.PERatio);
+
+                    this.SetFirstYearProfitSharing(Convert.ToString(stockInfo.getProfitSharingInLastYear(-1)));
+                    this.SetSecondYearProfitSharing(Convert.ToString(stockInfo.getProfitSharingInLastYear(-2)));
+                    this.SetThirdYearProfitSharing(Convert.ToString(stockInfo.getProfitSharingInLastYear(-3)));
+                    this.SetFourthYearProfitSharing(Convert.ToString(stockInfo.getProfitSharingInLastYear(-4)));
+                    this.SetFifthYearProfitSharing(Convert.ToString(stockInfo.getProfitSharingInLastYear(-5)));
+
+                    MessageBox.Show(retrieveStockInfoSuccessMessage);
+
+                    // Persist new company info after successfully retrieved
+                    if (checkBoxKeepPreferStockID.Checked)
+                    {
+                        string persistString = "\n" + originalStockID + ","
+                                                    + txtCompanyName.Text + ","
+                                                    + txtDateOfInfo.Text + ","
+                                                    + txtLastTradingPrice.Text + ","
+                                                    + txtCompanyProfitPerShare.Text + ","
+                                                    + txtPERatio.Text + ","
+                                                    + txtFirstYearProfitSharing.Text + ","
+                                                    + txtSecondYearProfitSharing.Text + ","
+                                                    + txtThirdYearProfitSharing.Text + ","
+                                                    + txtFourthYearProfitSharing.Text + ","
+                                                    + txtFifthYearProfitSharing.Text;
+                        if (!File.Exists(preferStockListFileName) || !File.ReadAllText(preferStockListFileName).Contains(persistString))
+                        {
+                            File.AppendAllText(preferStockListFileName, persistString);
+                        }
+                        this.updateStockIDList();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(retrieveStockInfoFailedMessage);
+                }
+            });
+            
+        }
+
+        
+        private void updateStockIDList()
+        {
+            if (this.comboBoxStockIDList.InvokeRequired)
             {
-                MessageBox.Show(retrieveStockInfoFailedMessage);
+                this.Invoke(new Utils.InvokeDelegate(updateStockIDList),null);
+            }
+            else
+            {
+                comboBoxStockIDList.Items.Clear();
+                comboBoxStockIDList.Items.AddRange(Utils.readPreferStockIDList());
             }
         }
 
@@ -495,17 +543,140 @@ namespace StockValueCalculator
 
             if (fileContent.Length >= idx)
             {
-                txtCompanyName.Text = Utils.getValueFromArray(fileContentArray, 1);
-                txtDateOfInfo.Text = Utils.getValueFromArray(fileContentArray, 2);
-                txtLastTradingPrice.Text = Utils.getValueFromArray(fileContentArray, 3);
-                txtCompanyProfitPerShare.Text = Utils.getValueFromArray(fileContentArray, 4);
-                txtPERatio.Text = Utils.getValueFromArray(fileContentArray, 5);
-                txtFirstYearProfitSharing.Text = Utils.getValueFromArray(fileContentArray, 6);
-                txtSecondYearProfitSharing.Text = Utils.getValueFromArray(fileContentArray, 7);
-                txtThirdYearProfitSharing.Text = Utils.getValueFromArray(fileContentArray, 8);
-                txtFourthYearProfitSharing.Text = Utils.getValueFromArray(fileContentArray, 9);
-                txtFifthYearProfitSharing.Text = Utils.getValueFromArray(fileContentArray, 10);
+                this.SetCompanyName(Utils.getValueFromArray(fileContentArray, 1));
+                this.SetDateOfInfo(Utils.getValueFromArray(fileContentArray, 2));
+                this.SetLastTradingPrice(Utils.getValueFromArray(fileContentArray, 3));
+                this.SetCompanyProfitPerShare(Utils.getValueFromArray(fileContentArray, 4));
+                this.SetPERatio(Utils.getValueFromArray(fileContentArray, 5));
+                this.SetFirstYearProfitSharing(Utils.getValueFromArray(fileContentArray, 6));
+                this.SetSecondYearProfitSharing(Utils.getValueFromArray(fileContentArray, 7));
+                this.SetThirdYearProfitSharing(Utils.getValueFromArray(fileContentArray, 8));
+                this.SetFourthYearProfitSharing(Utils.getValueFromArray(fileContentArray, 9));
+                this.SetFifthYearProfitSharing(Utils.getValueFromArray(fileContentArray, 10));
             }
         }
+
+        #region "Set parameters on UI region"
+        public void SetCompanyName(string companyName)
+        {
+            if (this.txtCompanyName.InvokeRequired)
+            {
+                this.txtCompanyName.Invoke(new Utils.SetParameterDelegate(SetCompanyName), new object[] { companyName });
+            }
+            else
+            {
+                this.txtCompanyName.Text = companyName;
+            }
+        }
+
+        public void SetDateOfInfo(string dateOfInfo)
+        {
+            if (this.txtDateOfInfo.InvokeRequired)
+            {
+                this.txtDateOfInfo.Invoke(new Utils.SetParameterDelegate(SetDateOfInfo), new object[] { dateOfInfo});
+            }
+            else
+            {
+                this.txtDateOfInfo.Text = dateOfInfo;
+            }
+        }
+
+        public void SetLastTradingPrice(string lastTradingPrice)
+        {
+            if (this.txtLastTradingPrice.InvokeRequired)
+            {
+                this.txtLastTradingPrice.Invoke(new Utils.SetParameterDelegate(SetLastTradingPrice), new object[] { lastTradingPrice});
+            }
+            else
+            {
+                this.txtLastTradingPrice.Text = lastTradingPrice;
+            }
+        }
+
+        public void SetCompanyProfitPerShare(string companyProfitPerShare)
+        {
+            if (this.txtCompanyProfitPerShare.InvokeRequired)
+            {
+                this.txtCompanyProfitPerShare.Invoke(new Utils.SetParameterDelegate(SetCompanyProfitPerShare), new object[] { companyProfitPerShare});
+            }
+            else
+            {
+                this.txtCompanyProfitPerShare.Text = companyProfitPerShare;
+            }
+        }
+
+        public void SetPERatio(string PERatio)
+        {
+            if (this.txtPERatio.InvokeRequired)
+            {
+                this.txtPERatio.Invoke(new Utils.SetParameterDelegate(SetPERatio), new object[] { PERatio});
+            }
+            else
+            {
+                this.txtPERatio.Text = PERatio;
+            }
+        }
+
+        public void SetFirstYearProfitSharing(string firstYearProfitSharing)
+        {
+            if (this.txtFirstYearProfitSharing.InvokeRequired)
+            {
+                this.txtFirstYearProfitSharing.Invoke(new Utils.SetParameterDelegate(SetFirstYearProfitSharing), new object[] { firstYearProfitSharing});
+            }
+            else
+            {
+                this.txtFirstYearProfitSharing.Text = firstYearProfitSharing;
+            }
+        }
+
+        public void SetSecondYearProfitSharing(string secondYearProfitSharing)
+        {
+            if (this.txtSecondYearProfitSharing.InvokeRequired)
+            {
+                this.txtSecondYearProfitSharing.Invoke(new Utils.SetParameterDelegate(SetSecondYearProfitSharing), new object[] { secondYearProfitSharing});
+            }
+            else
+            {
+                this.txtSecondYearProfitSharing.Text = secondYearProfitSharing;
+            }
+        }
+
+        public void SetThirdYearProfitSharing(string thirdYearProfitSharing)
+        {
+            if (this.txtThirdYearProfitSharing.InvokeRequired)
+            {
+                this.txtThirdYearProfitSharing.Invoke(new Utils.SetParameterDelegate(SetThirdYearProfitSharing), new object[] { thirdYearProfitSharing});
+            }
+            else
+            {
+                this.txtThirdYearProfitSharing.Text = thirdYearProfitSharing;
+            }
+        }
+
+        public void SetFourthYearProfitSharing(string fourthYearProfitSharing)
+        {
+            if (this.txtFourthYearProfitSharing.InvokeRequired)
+            {
+                this.txtFourthYearProfitSharing.Invoke(new Utils.SetParameterDelegate(SetFourthYearProfitSharing), new object[] { fourthYearProfitSharing});
+            }
+            else
+            {
+                this.txtFourthYearProfitSharing.Text = fourthYearProfitSharing;
+            }
+        }
+
+        public void SetFifthYearProfitSharing(string fifthYearProfitSharing)
+        {
+            if (this.txtFifthYearProfitSharing.InvokeRequired)
+            {
+                this.txtFifthYearProfitSharing.Invoke(new Utils.SetParameterDelegate(SetFifthYearProfitSharing), new object[] { fifthYearProfitSharing});
+            }
+            else
+            {
+                this.txtFifthYearProfitSharing.Text = fifthYearProfitSharing;
+            }
+        }
+        #endregion
+
     }
 }

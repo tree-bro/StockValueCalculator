@@ -64,6 +64,7 @@
             this.groupBoxForServerParseParams = new System.Windows.Forms.GroupBox();
             this.stockMarketPage = new System.Windows.Forms.TabPage();
             this.groupBoxForCheckingParameters = new System.Windows.Forms.GroupBox();
+            this.checkBoxUsePreviousProfit = new System.Windows.Forms.CheckBox();
             this.checkBoxKeepPreferStockID = new System.Windows.Forms.CheckBox();
             this.btnClearPreferStockList = new System.Windows.Forms.Button();
             this.groupBoxForStockInfo = new System.Windows.Forms.GroupBox();
@@ -90,7 +91,6 @@
             this.lblLastTradingPrice = new System.Windows.Forms.Label();
             this.txtCompanyName = new System.Windows.Forms.TextBox();
             this.btnRetrieveStockInfo = new System.Windows.Forms.Button();
-            this.checkBoxUsePreviousProfit = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.calculationPage.SuspendLayout();
             this.groupBoxForManualInputParams.SuspendLayout();
@@ -112,8 +112,9 @@
             // 
             // txtMarketPrice
             // 
-            this.txtMarketPrice.Location = new System.Drawing.Point(182, 23);
-            this.txtMarketPrice.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtMarketPrice.BackColor = System.Drawing.Color.Wheat;
+            this.txtMarketPrice.Location = new System.Drawing.Point(224, 22);
+            this.txtMarketPrice.Margin = new System.Windows.Forms.Padding(2);
             this.txtMarketPrice.Name = "txtMarketPrice";
             this.txtMarketPrice.Size = new System.Drawing.Size(160, 21);
             this.txtMarketPrice.TabIndex = 1;
@@ -121,8 +122,9 @@
             // 
             // txtTradeTaxRate
             // 
-            this.txtTradeTaxRate.Location = new System.Drawing.Point(182, 25);
-            this.txtTradeTaxRate.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtTradeTaxRate.BackColor = System.Drawing.Color.Wheat;
+            this.txtTradeTaxRate.Location = new System.Drawing.Point(224, 23);
+            this.txtTradeTaxRate.Margin = new System.Windows.Forms.Padding(2);
             this.txtTradeTaxRate.Name = "txtTradeTaxRate";
             this.txtTradeTaxRate.Size = new System.Drawing.Size(160, 21);
             this.txtTradeTaxRate.TabIndex = 3;
@@ -130,8 +132,9 @@
             // 
             // txtProfitPerShare
             // 
-            this.txtProfitPerShare.Location = new System.Drawing.Point(182, 54);
-            this.txtProfitPerShare.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtProfitPerShare.BackColor = System.Drawing.Color.Wheat;
+            this.txtProfitPerShare.Location = new System.Drawing.Point(224, 53);
+            this.txtProfitPerShare.Margin = new System.Windows.Forms.Padding(2);
             this.txtProfitPerShare.Name = "txtProfitPerShare";
             this.txtProfitPerShare.Size = new System.Drawing.Size(160, 21);
             this.txtProfitPerShare.TabIndex = 5;
@@ -149,8 +152,9 @@
             // 
             // txtCompanyDuration
             // 
-            this.txtCompanyDuration.Location = new System.Drawing.Point(182, 58);
-            this.txtCompanyDuration.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtCompanyDuration.BackColor = System.Drawing.Color.Wheat;
+            this.txtCompanyDuration.Location = new System.Drawing.Point(224, 56);
+            this.txtCompanyDuration.Margin = new System.Windows.Forms.Padding(2);
             this.txtCompanyDuration.Name = "txtCompanyDuration";
             this.txtCompanyDuration.Size = new System.Drawing.Size(160, 21);
             this.txtCompanyDuration.TabIndex = 7;
@@ -168,8 +172,9 @@
             // 
             // txtDiscountRate
             // 
-            this.txtDiscountRate.Location = new System.Drawing.Point(182, 88);
-            this.txtDiscountRate.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtDiscountRate.BackColor = System.Drawing.Color.Wheat;
+            this.txtDiscountRate.Location = new System.Drawing.Point(224, 86);
+            this.txtDiscountRate.Margin = new System.Windows.Forms.Padding(2);
             this.txtDiscountRate.Name = "txtDiscountRate";
             this.txtDiscountRate.Size = new System.Drawing.Size(160, 21);
             this.txtDiscountRate.TabIndex = 9;
@@ -187,8 +192,9 @@
             // 
             // txtNormalGrowthRate
             // 
-            this.txtNormalGrowthRate.Location = new System.Drawing.Point(182, 117);
-            this.txtNormalGrowthRate.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtNormalGrowthRate.BackColor = System.Drawing.Color.Wheat;
+            this.txtNormalGrowthRate.Location = new System.Drawing.Point(224, 115);
+            this.txtNormalGrowthRate.Margin = new System.Windows.Forms.Padding(2);
             this.txtNormalGrowthRate.Name = "txtNormalGrowthRate";
             this.txtNormalGrowthRate.Size = new System.Drawing.Size(160, 21);
             this.txtNormalGrowthRate.TabIndex = 11;
@@ -206,8 +212,9 @@
             // 
             // txtHighSpeedGrowthRate
             // 
-            this.txtHighSpeedGrowthRate.Location = new System.Drawing.Point(182, 146);
-            this.txtHighSpeedGrowthRate.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtHighSpeedGrowthRate.BackColor = System.Drawing.Color.Wheat;
+            this.txtHighSpeedGrowthRate.Location = new System.Drawing.Point(224, 144);
+            this.txtHighSpeedGrowthRate.Margin = new System.Windows.Forms.Padding(2);
             this.txtHighSpeedGrowthRate.Name = "txtHighSpeedGrowthRate";
             this.txtHighSpeedGrowthRate.Size = new System.Drawing.Size(160, 21);
             this.txtHighSpeedGrowthRate.TabIndex = 13;
@@ -225,8 +232,9 @@
             // 
             // txtHighSpeedGrowthDuration
             // 
-            this.txtHighSpeedGrowthDuration.Location = new System.Drawing.Point(182, 178);
-            this.txtHighSpeedGrowthDuration.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtHighSpeedGrowthDuration.BackColor = System.Drawing.Color.Wheat;
+            this.txtHighSpeedGrowthDuration.Location = new System.Drawing.Point(224, 176);
+            this.txtHighSpeedGrowthDuration.Margin = new System.Windows.Forms.Padding(2);
             this.txtHighSpeedGrowthDuration.Name = "txtHighSpeedGrowthDuration";
             this.txtHighSpeedGrowthDuration.Size = new System.Drawing.Size(160, 21);
             this.txtHighSpeedGrowthDuration.TabIndex = 15;
@@ -244,8 +252,9 @@
             // 
             // txtProfitSharingRate
             // 
-            this.txtProfitSharingRate.Location = new System.Drawing.Point(182, 83);
-            this.txtProfitSharingRate.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtProfitSharingRate.BackColor = System.Drawing.Color.Wheat;
+            this.txtProfitSharingRate.Location = new System.Drawing.Point(224, 82);
+            this.txtProfitSharingRate.Margin = new System.Windows.Forms.Padding(2);
             this.txtProfitSharingRate.Name = "txtProfitSharingRate";
             this.txtProfitSharingRate.Size = new System.Drawing.Size(160, 21);
             this.txtProfitSharingRate.TabIndex = 17;
@@ -273,8 +282,9 @@
             // 
             // txtProfitSharingTax
             // 
-            this.txtProfitSharingTax.Location = new System.Drawing.Point(182, 206);
-            this.txtProfitSharingTax.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtProfitSharingTax.BackColor = System.Drawing.Color.Wheat;
+            this.txtProfitSharingTax.Location = new System.Drawing.Point(224, 204);
+            this.txtProfitSharingTax.Margin = new System.Windows.Forms.Padding(2);
             this.txtProfitSharingTax.Name = "txtProfitSharingTax";
             this.txtProfitSharingTax.Size = new System.Drawing.Size(160, 21);
             this.txtProfitSharingTax.TabIndex = 20;
@@ -292,8 +302,9 @@
             // 
             // txtDepressionFrequency
             // 
-            this.txtDepressionFrequency.Location = new System.Drawing.Point(182, 237);
-            this.txtDepressionFrequency.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtDepressionFrequency.BackColor = System.Drawing.Color.Wheat;
+            this.txtDepressionFrequency.Location = new System.Drawing.Point(224, 235);
+            this.txtDepressionFrequency.Margin = new System.Windows.Forms.Padding(2);
             this.txtDepressionFrequency.Name = "txtDepressionFrequency";
             this.txtDepressionFrequency.Size = new System.Drawing.Size(160, 21);
             this.txtDepressionFrequency.TabIndex = 22;
@@ -311,8 +322,9 @@
             // 
             // txtDepressionLossRate
             // 
-            this.txtDepressionLossRate.Location = new System.Drawing.Point(182, 264);
-            this.txtDepressionLossRate.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtDepressionLossRate.BackColor = System.Drawing.Color.Wheat;
+            this.txtDepressionLossRate.Location = new System.Drawing.Point(224, 262);
+            this.txtDepressionLossRate.Margin = new System.Windows.Forms.Padding(2);
             this.txtDepressionLossRate.Name = "txtDepressionLossRate";
             this.txtDepressionLossRate.Size = new System.Drawing.Size(160, 21);
             this.txtDepressionLossRate.TabIndex = 24;
@@ -330,8 +342,9 @@
             // 
             // txtStockHeldDuration
             // 
-            this.txtStockHeldDuration.Location = new System.Drawing.Point(182, 296);
-            this.txtStockHeldDuration.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtStockHeldDuration.BackColor = System.Drawing.Color.Wheat;
+            this.txtStockHeldDuration.Location = new System.Drawing.Point(224, 294);
+            this.txtStockHeldDuration.Margin = new System.Windows.Forms.Padding(2);
             this.txtStockHeldDuration.Name = "txtStockHeldDuration";
             this.txtStockHeldDuration.Size = new System.Drawing.Size(160, 21);
             this.txtStockHeldDuration.TabIndex = 26;
@@ -349,24 +362,32 @@
             // 
             // btnCalculate
             // 
-            this.btnCalculate.Location = new System.Drawing.Point(93, 506);
-            this.btnCalculate.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnCalculate.BackColor = System.Drawing.Color.SkyBlue;
+            this.btnCalculate.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCalculate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCalculate.Font = new System.Drawing.Font("黑体", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnCalculate.Location = new System.Drawing.Point(109, 503);
+            this.btnCalculate.Margin = new System.Windows.Forms.Padding(2);
             this.btnCalculate.Name = "btnCalculate";
-            this.btnCalculate.Size = new System.Drawing.Size(177, 34);
+            this.btnCalculate.Size = new System.Drawing.Size(198, 34);
             this.btnCalculate.TabIndex = 27;
             this.btnCalculate.Text = "Calculate!";
-            this.btnCalculate.UseVisualStyleBackColor = true;
+            this.btnCalculate.UseVisualStyleBackColor = false;
             this.btnCalculate.Click += new System.EventHandler(this.btnCalculate_Click);
             // 
             // btnParseCompanyDetails
             // 
-            this.btnParseCompanyDetails.Location = new System.Drawing.Point(93, 457);
-            this.btnParseCompanyDetails.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnParseCompanyDetails.BackColor = System.Drawing.Color.SkyBlue;
+            this.btnParseCompanyDetails.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnParseCompanyDetails.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnParseCompanyDetails.Font = new System.Drawing.Font("黑体", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnParseCompanyDetails.Location = new System.Drawing.Point(109, 455);
+            this.btnParseCompanyDetails.Margin = new System.Windows.Forms.Padding(2);
             this.btnParseCompanyDetails.Name = "btnParseCompanyDetails";
-            this.btnParseCompanyDetails.Size = new System.Drawing.Size(177, 34);
+            this.btnParseCompanyDetails.Size = new System.Drawing.Size(198, 34);
             this.btnParseCompanyDetails.TabIndex = 28;
             this.btnParseCompanyDetails.Text = "Parse Details From File";
-            this.btnParseCompanyDetails.UseVisualStyleBackColor = true;
+            this.btnParseCompanyDetails.UseVisualStyleBackColor = false;
             this.btnParseCompanyDetails.Click += new System.EventHandler(this.btnParseCompanyDetails_Click);
             // 
             // openFileDialogForCompanyDetails
@@ -375,13 +396,16 @@
             // 
             // btnParseCompanyDetailsFromServer
             // 
-            this.btnParseCompanyDetailsFromServer.Location = new System.Drawing.Point(198, 452);
-            this.btnParseCompanyDetailsFromServer.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnParseCompanyDetailsFromServer.BackColor = System.Drawing.Color.SkyBlue;
+            this.btnParseCompanyDetailsFromServer.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnParseCompanyDetailsFromServer.Font = new System.Drawing.Font("黑体", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnParseCompanyDetailsFromServer.Location = new System.Drawing.Point(111, 497);
+            this.btnParseCompanyDetailsFromServer.Margin = new System.Windows.Forms.Padding(2);
             this.btnParseCompanyDetailsFromServer.Name = "btnParseCompanyDetailsFromServer";
-            this.btnParseCompanyDetailsFromServer.Size = new System.Drawing.Size(177, 34);
+            this.btnParseCompanyDetailsFromServer.Size = new System.Drawing.Size(197, 34);
             this.btnParseCompanyDetailsFromServer.TabIndex = 29;
             this.btnParseCompanyDetailsFromServer.Text = "Parse Details From Server";
-            this.btnParseCompanyDetailsFromServer.UseVisualStyleBackColor = true;
+            this.btnParseCompanyDetailsFromServer.UseVisualStyleBackColor = false;
             this.btnParseCompanyDetailsFromServer.Click += new System.EventHandler(this.btnParseCompanyDetailsFromServer_Click);
             // 
             // tabControl1
@@ -392,7 +416,7 @@
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(386, 576);
+            this.tabControl1.Size = new System.Drawing.Size(441, 576);
             this.tabControl1.TabIndex = 30;
             this.tabControl1.DragDrop += new System.Windows.Forms.DragEventHandler(this.tabControl1_DragDrop);
             this.tabControl1.DragEnter += new System.Windows.Forms.DragEventHandler(this.tabControl1_DragEnter);
@@ -405,8 +429,8 @@
             this.calculationPage.Controls.Add(this.btnParseCompanyDetails);
             this.calculationPage.Location = new System.Drawing.Point(4, 22);
             this.calculationPage.Name = "calculationPage";
-            this.calculationPage.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
-            this.calculationPage.Size = new System.Drawing.Size(378, 550);
+            this.calculationPage.Padding = new System.Windows.Forms.Padding(3);
+            this.calculationPage.Size = new System.Drawing.Size(433, 550);
             this.calculationPage.TabIndex = 0;
             this.calculationPage.Text = "calculationPage";
             this.calculationPage.UseVisualStyleBackColor = true;
@@ -433,9 +457,10 @@
             this.groupBoxForManualInputParams.Controls.Add(this.lblDepressionFrequency);
             this.groupBoxForManualInputParams.Controls.Add(this.txtDepressionFrequency);
             this.groupBoxForManualInputParams.Controls.Add(this.txtDiscountRate);
+            this.groupBoxForManualInputParams.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.groupBoxForManualInputParams.Location = new System.Drawing.Point(6, 125);
             this.groupBoxForManualInputParams.Name = "groupBoxForManualInputParams";
-            this.groupBoxForManualInputParams.Size = new System.Drawing.Size(357, 325);
+            this.groupBoxForManualInputParams.Size = new System.Drawing.Size(421, 325);
             this.groupBoxForManualInputParams.TabIndex = 30;
             this.groupBoxForManualInputParams.TabStop = false;
             this.groupBoxForManualInputParams.Text = "Manual Input Params";
@@ -448,9 +473,10 @@
             this.groupBoxForServerParseParams.Controls.Add(this.txtMarketPrice);
             this.groupBoxForServerParseParams.Controls.Add(this.lblProfitPerShare);
             this.groupBoxForServerParseParams.Controls.Add(this.txtProfitSharingRate);
+            this.groupBoxForServerParseParams.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.groupBoxForServerParseParams.Location = new System.Drawing.Point(6, 6);
             this.groupBoxForServerParseParams.Name = "groupBoxForServerParseParams";
-            this.groupBoxForServerParseParams.Size = new System.Drawing.Size(357, 112);
+            this.groupBoxForServerParseParams.Size = new System.Drawing.Size(421, 112);
             this.groupBoxForServerParseParams.TabIndex = 29;
             this.groupBoxForServerParseParams.TabStop = false;
             this.groupBoxForServerParseParams.Text = "Server Parsable Params";
@@ -464,8 +490,8 @@
             this.stockMarketPage.Controls.Add(this.btnParseCompanyDetailsFromServer);
             this.stockMarketPage.Location = new System.Drawing.Point(4, 22);
             this.stockMarketPage.Name = "stockMarketPage";
-            this.stockMarketPage.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
-            this.stockMarketPage.Size = new System.Drawing.Size(378, 550);
+            this.stockMarketPage.Padding = new System.Windows.Forms.Padding(3);
+            this.stockMarketPage.Size = new System.Drawing.Size(433, 550);
             this.stockMarketPage.TabIndex = 1;
             this.stockMarketPage.Text = "stockMarketPage";
             this.stockMarketPage.UseVisualStyleBackColor = true;
@@ -474,31 +500,48 @@
             // 
             this.groupBoxForCheckingParameters.Controls.Add(this.checkBoxUsePreviousProfit);
             this.groupBoxForCheckingParameters.Controls.Add(this.checkBoxKeepPreferStockID);
+            this.groupBoxForCheckingParameters.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.groupBoxForCheckingParameters.Location = new System.Drawing.Point(6, 6);
             this.groupBoxForCheckingParameters.Name = "groupBoxForCheckingParameters";
-            this.groupBoxForCheckingParameters.Size = new System.Drawing.Size(366, 49);
+            this.groupBoxForCheckingParameters.Size = new System.Drawing.Size(421, 49);
             this.groupBoxForCheckingParameters.TabIndex = 43;
             this.groupBoxForCheckingParameters.TabStop = false;
             this.groupBoxForCheckingParameters.Text = "CheckingParameters";
             // 
+            // checkBoxUsePreviousProfit
+            // 
+            this.checkBoxUsePreviousProfit.AutoSize = true;
+            this.checkBoxUsePreviousProfit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.checkBoxUsePreviousProfit.Location = new System.Drawing.Point(280, 20);
+            this.checkBoxUsePreviousProfit.Name = "checkBoxUsePreviousProfit";
+            this.checkBoxUsePreviousProfit.Size = new System.Drawing.Size(135, 16);
+            this.checkBoxUsePreviousProfit.TabIndex = 43;
+            this.checkBoxUsePreviousProfit.Text = "Use Previous Profit";
+            this.checkBoxUsePreviousProfit.UseVisualStyleBackColor = true;
+            // 
             // checkBoxKeepPreferStockID
             // 
             this.checkBoxKeepPreferStockID.AutoSize = true;
+            this.checkBoxKeepPreferStockID.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.checkBoxKeepPreferStockID.Location = new System.Drawing.Point(7, 20);
             this.checkBoxKeepPreferStockID.Name = "checkBoxKeepPreferStockID";
-            this.checkBoxKeepPreferStockID.Size = new System.Drawing.Size(144, 16);
+            this.checkBoxKeepPreferStockID.Size = new System.Drawing.Size(141, 16);
             this.checkBoxKeepPreferStockID.TabIndex = 42;
             this.checkBoxKeepPreferStockID.Text = "Keep Prefer Stock ID";
             this.checkBoxKeepPreferStockID.UseVisualStyleBackColor = true;
             // 
             // btnClearPreferStockList
             // 
-            this.btnClearPreferStockList.Location = new System.Drawing.Point(100, 500);
+            this.btnClearPreferStockList.BackColor = System.Drawing.Color.SkyBlue;
+            this.btnClearPreferStockList.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnClearPreferStockList.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnClearPreferStockList.Font = new System.Drawing.Font("黑体", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnClearPreferStockList.Location = new System.Drawing.Point(244, 454);
             this.btnClearPreferStockList.Name = "btnClearPreferStockList";
-            this.btnClearPreferStockList.Size = new System.Drawing.Size(177, 30);
+            this.btnClearPreferStockList.Size = new System.Drawing.Size(177, 32);
             this.btnClearPreferStockList.TabIndex = 41;
             this.btnClearPreferStockList.Text = "Clear Prefer Stock IDs";
-            this.btnClearPreferStockList.UseVisualStyleBackColor = true;
+            this.btnClearPreferStockList.UseVisualStyleBackColor = false;
             this.btnClearPreferStockList.Click += new System.EventHandler(this.btnClearPreferStockList_Click);
             // 
             // groupBoxForStockInfo
@@ -525,9 +568,10 @@
             this.groupBoxForStockInfo.Controls.Add(this.txtLastTradingPrice);
             this.groupBoxForStockInfo.Controls.Add(this.lblLastTradingPrice);
             this.groupBoxForStockInfo.Controls.Add(this.txtCompanyName);
+            this.groupBoxForStockInfo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.groupBoxForStockInfo.Location = new System.Drawing.Point(6, 61);
             this.groupBoxForStockInfo.Name = "groupBoxForStockInfo";
-            this.groupBoxForStockInfo.Size = new System.Drawing.Size(366, 375);
+            this.groupBoxForStockInfo.Size = new System.Drawing.Size(421, 375);
             this.groupBoxForStockInfo.TabIndex = 40;
             this.groupBoxForStockInfo.TabStop = false;
             this.groupBoxForStockInfo.Text = "StockInfo";
@@ -544,9 +588,10 @@
             // 
             // txtFifthYearProfitSharing
             // 
+            this.txtFifthYearProfitSharing.BackColor = System.Drawing.Color.Wheat;
             this.txtFifthYearProfitSharing.Enabled = false;
-            this.txtFifthYearProfitSharing.Location = new System.Drawing.Point(164, 345);
-            this.txtFifthYearProfitSharing.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtFifthYearProfitSharing.Location = new System.Drawing.Point(201, 345);
+            this.txtFifthYearProfitSharing.Margin = new System.Windows.Forms.Padding(2);
             this.txtFifthYearProfitSharing.Name = "txtFifthYearProfitSharing";
             this.txtFifthYearProfitSharing.Size = new System.Drawing.Size(184, 21);
             this.txtFifthYearProfitSharing.TabIndex = 54;
@@ -563,9 +608,10 @@
             // 
             // txtFourthYearProfitSharing
             // 
+            this.txtFourthYearProfitSharing.BackColor = System.Drawing.Color.Wheat;
             this.txtFourthYearProfitSharing.Enabled = false;
-            this.txtFourthYearProfitSharing.Location = new System.Drawing.Point(164, 314);
-            this.txtFourthYearProfitSharing.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtFourthYearProfitSharing.Location = new System.Drawing.Point(201, 314);
+            this.txtFourthYearProfitSharing.Margin = new System.Windows.Forms.Padding(2);
             this.txtFourthYearProfitSharing.Name = "txtFourthYearProfitSharing";
             this.txtFourthYearProfitSharing.Size = new System.Drawing.Size(184, 21);
             this.txtFourthYearProfitSharing.TabIndex = 52;
@@ -582,9 +628,10 @@
             // 
             // txtThirdYearProfitSharing
             // 
+            this.txtThirdYearProfitSharing.BackColor = System.Drawing.Color.Wheat;
             this.txtThirdYearProfitSharing.Enabled = false;
-            this.txtThirdYearProfitSharing.Location = new System.Drawing.Point(164, 281);
-            this.txtThirdYearProfitSharing.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtThirdYearProfitSharing.Location = new System.Drawing.Point(201, 281);
+            this.txtThirdYearProfitSharing.Margin = new System.Windows.Forms.Padding(2);
             this.txtThirdYearProfitSharing.Name = "txtThirdYearProfitSharing";
             this.txtThirdYearProfitSharing.Size = new System.Drawing.Size(184, 21);
             this.txtThirdYearProfitSharing.TabIndex = 50;
@@ -601,9 +648,10 @@
             // 
             // txtSecondYearProfitSharing
             // 
+            this.txtSecondYearProfitSharing.BackColor = System.Drawing.Color.Wheat;
             this.txtSecondYearProfitSharing.Enabled = false;
-            this.txtSecondYearProfitSharing.Location = new System.Drawing.Point(164, 248);
-            this.txtSecondYearProfitSharing.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtSecondYearProfitSharing.Location = new System.Drawing.Point(201, 248);
+            this.txtSecondYearProfitSharing.Margin = new System.Windows.Forms.Padding(2);
             this.txtSecondYearProfitSharing.Name = "txtSecondYearProfitSharing";
             this.txtSecondYearProfitSharing.Size = new System.Drawing.Size(184, 21);
             this.txtSecondYearProfitSharing.TabIndex = 48;
@@ -620,17 +668,19 @@
             // 
             // txtFirstYearProfitSharing
             // 
+            this.txtFirstYearProfitSharing.BackColor = System.Drawing.Color.Wheat;
             this.txtFirstYearProfitSharing.Enabled = false;
-            this.txtFirstYearProfitSharing.Location = new System.Drawing.Point(164, 214);
-            this.txtFirstYearProfitSharing.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtFirstYearProfitSharing.Location = new System.Drawing.Point(201, 214);
+            this.txtFirstYearProfitSharing.Margin = new System.Windows.Forms.Padding(2);
             this.txtFirstYearProfitSharing.Name = "txtFirstYearProfitSharing";
             this.txtFirstYearProfitSharing.Size = new System.Drawing.Size(184, 21);
             this.txtFirstYearProfitSharing.TabIndex = 46;
             // 
             // comboBoxStockIDList
             // 
+            this.comboBoxStockIDList.BackColor = System.Drawing.Color.Wheat;
             this.comboBoxStockIDList.FormattingEnabled = true;
-            this.comboBoxStockIDList.Location = new System.Drawing.Point(164, 20);
+            this.comboBoxStockIDList.Location = new System.Drawing.Point(201, 20);
             this.comboBoxStockIDList.Name = "comboBoxStockIDList";
             this.comboBoxStockIDList.Size = new System.Drawing.Size(184, 20);
             this.comboBoxStockIDList.TabIndex = 44;
@@ -648,9 +698,10 @@
             // 
             // txtPERatio
             // 
+            this.txtPERatio.BackColor = System.Drawing.Color.Wheat;
             this.txtPERatio.Enabled = false;
-            this.txtPERatio.Location = new System.Drawing.Point(164, 179);
-            this.txtPERatio.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtPERatio.Location = new System.Drawing.Point(201, 179);
+            this.txtPERatio.Margin = new System.Windows.Forms.Padding(2);
             this.txtPERatio.Name = "txtPERatio";
             this.txtPERatio.Size = new System.Drawing.Size(184, 21);
             this.txtPERatio.TabIndex = 43;
@@ -667,9 +718,10 @@
             // 
             // txtDateOfInfo
             // 
+            this.txtDateOfInfo.BackColor = System.Drawing.Color.Wheat;
             this.txtDateOfInfo.Enabled = false;
-            this.txtDateOfInfo.Location = new System.Drawing.Point(164, 79);
-            this.txtDateOfInfo.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtDateOfInfo.Location = new System.Drawing.Point(201, 79);
+            this.txtDateOfInfo.Margin = new System.Windows.Forms.Padding(2);
             this.txtDateOfInfo.Name = "txtDateOfInfo";
             this.txtDateOfInfo.Size = new System.Drawing.Size(184, 21);
             this.txtDateOfInfo.TabIndex = 40;
@@ -706,18 +758,20 @@
             // 
             // txtCompanyProfitPerShare
             // 
+            this.txtCompanyProfitPerShare.BackColor = System.Drawing.Color.Wheat;
             this.txtCompanyProfitPerShare.Enabled = false;
-            this.txtCompanyProfitPerShare.Location = new System.Drawing.Point(164, 143);
-            this.txtCompanyProfitPerShare.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtCompanyProfitPerShare.Location = new System.Drawing.Point(201, 143);
+            this.txtCompanyProfitPerShare.Margin = new System.Windows.Forms.Padding(2);
             this.txtCompanyProfitPerShare.Name = "txtCompanyProfitPerShare";
             this.txtCompanyProfitPerShare.Size = new System.Drawing.Size(184, 21);
             this.txtCompanyProfitPerShare.TabIndex = 39;
             // 
             // txtLastTradingPrice
             // 
+            this.txtLastTradingPrice.BackColor = System.Drawing.Color.Wheat;
             this.txtLastTradingPrice.Enabled = false;
-            this.txtLastTradingPrice.Location = new System.Drawing.Point(164, 111);
-            this.txtLastTradingPrice.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtLastTradingPrice.Location = new System.Drawing.Point(201, 111);
+            this.txtLastTradingPrice.Margin = new System.Windows.Forms.Padding(2);
             this.txtLastTradingPrice.Name = "txtLastTradingPrice";
             this.txtLastTradingPrice.Size = new System.Drawing.Size(184, 21);
             this.txtLastTradingPrice.TabIndex = 36;
@@ -734,41 +788,37 @@
             // 
             // txtCompanyName
             // 
+            this.txtCompanyName.BackColor = System.Drawing.Color.Wheat;
             this.txtCompanyName.Enabled = false;
-            this.txtCompanyName.Location = new System.Drawing.Point(164, 50);
-            this.txtCompanyName.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtCompanyName.Location = new System.Drawing.Point(201, 50);
+            this.txtCompanyName.Margin = new System.Windows.Forms.Padding(2);
             this.txtCompanyName.Name = "txtCompanyName";
             this.txtCompanyName.Size = new System.Drawing.Size(184, 21);
             this.txtCompanyName.TabIndex = 34;
             // 
             // btnRetrieveStockInfo
             // 
+            this.btnRetrieveStockInfo.BackColor = System.Drawing.Color.SkyBlue;
+            this.btnRetrieveStockInfo.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnRetrieveStockInfo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRetrieveStockInfo.Font = new System.Drawing.Font("黑体", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnRetrieveStockInfo.Location = new System.Drawing.Point(6, 454);
             this.btnRetrieveStockInfo.Name = "btnRetrieveStockInfo";
             this.btnRetrieveStockInfo.Size = new System.Drawing.Size(177, 32);
             this.btnRetrieveStockInfo.TabIndex = 31;
             this.btnRetrieveStockInfo.Text = "Retrieve Stock Info";
-            this.btnRetrieveStockInfo.UseVisualStyleBackColor = true;
+            this.btnRetrieveStockInfo.UseVisualStyleBackColor = false;
             this.btnRetrieveStockInfo.Click += new System.EventHandler(this.btnRetrieveStockInfo_Click);
-            // 
-            // checkBoxUsePreviousProfit
-            // 
-            this.checkBoxUsePreviousProfit.AutoSize = true;
-            this.checkBoxUsePreviousProfit.Location = new System.Drawing.Point(204, 20);
-            this.checkBoxUsePreviousProfit.Name = "checkBoxUsePreviousProfit";
-            this.checkBoxUsePreviousProfit.Size = new System.Drawing.Size(138, 16);
-            this.checkBoxUsePreviousProfit.TabIndex = 43;
-            this.checkBoxUsePreviousProfit.Text = "Use Previous Profit";
-            this.checkBoxUsePreviousProfit.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(412, 599);
+            this.BackColor = System.Drawing.SystemColors.Control;
+            this.ClientSize = new System.Drawing.Size(465, 599);
             this.Controls.Add(this.tabControl1);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
             this.Text = "StockValueCalculator";
             this.tabControl1.ResumeLayout(false);

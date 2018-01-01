@@ -10,6 +10,17 @@ namespace StockValueCalculator
 {
     public class Utils
     {
+
+        /// <summary>
+        /// Delegate for handling any info parsing process
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="stockInfo"></param>
+        private delegate void InfoParsingDel(string url, ref StockInfo stockInfo);
+
+        public delegate void InvokeDelegate();
+        public delegate void SetParameterDelegate(string input);
+
         public static HtmlAgilityPack.HtmlDocument loadHtmlDocument(string url, Encoding encoding)
         {
             HttpWebResponse response = (HttpWebResponse)WebRequest.CreateHttp(url).GetResponse();
@@ -99,7 +110,24 @@ namespace StockValueCalculator
             return null;
         }
 
+        /// <summary>
+        /// Make the company basic info parsing process to be async
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="stockInfo"></param>
         public static void parseCompanyBasicInfo(string url, ref StockInfo stockInfo)
+        {
+            InfoParsingDel parseDel = new InfoParsingDel(parseCompanyBasicInfoCore);
+
+            parseDel.Invoke(url, ref stockInfo);
+        }
+
+        /// <summary>
+        /// This is the core process for parsing company basic info
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="stockInfo"></param>
+        private static void parseCompanyBasicInfoCore(string url, ref StockInfo stockInfo)
         {
             // The following implementation is based on Baidu Stock API.
             // It might need to be changed if we decide to use other API instead.
@@ -150,18 +178,38 @@ namespace StockValueCalculator
                 // Always use PERatio for bellow calculation if available.
                 if (peRatio > 0)
                 {
-                    companyProfitPerShare = decimal.Round(lastTradingPrice / peRatio * 365M / DateTime.Today.DayOfYear, 4);
+                    //companyProfitPerShare = decimal.Round(lastTradingPrice / peRatio * 365M / DateTime.Today.DayOfYear, 4);
+                    companyProfitPerShare = decimal.Round(lastTradingPrice / peRatio, 4);
                 }
                 else if (companyProfitPerShare > 0)
                 {
-                    companyProfitPerShare = decimal.Round(companyProfitPerShare * 365M / DateTime.Today.DayOfYear, 4);
+                    //companyProfitPerShare = decimal.Round(companyProfitPerShare * 365M / DateTime.Today.DayOfYear, 4);
+                    companyProfitPerShare = decimal.Round(companyProfitPerShare, 4);
                 }
 
                 stockInfo.CompanyProfitPerShare = Convert.ToString(companyProfitPerShare);
             }
         }
 
+        /// <summary>
+        /// Change the company profit per share parsing process to be handled async
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="stockInfo"></param>
         public static void parseCompanyProfitPerShare(string url, ref StockInfo stockInfo)
+        {
+            InfoParsingDel parseDel = new InfoParsingDel(parseCompanyProfitPerShareCore);
+
+            parseDel.Invoke(url, ref stockInfo);
+        }
+
+
+        /// <summary>
+        /// This is the core process for parsing company profit per share
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="stockInfo"></param>
+        private static void parseCompanyProfitPerShareCore(string url, ref StockInfo stockInfo)
         {
             // The following is to parse more accurate company profit per share from ifeng api.
             HtmlAgilityPack.HtmlDocument ProfitPerShareHtmlDocument = Utils.loadHtmlDocument(url, Encoding.GetEncoding("utf-8"));
@@ -185,7 +233,24 @@ namespace StockValueCalculator
             }
         }
 
+        /// <summary>
+        /// Change the company profit sharing parsing process to be async
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="stockInfo"></param>
         public static void parseCompanyProfitSharing(string url, ref StockInfo stockInfo)
+        {
+            InfoParsingDel parseDel = new InfoParsingDel(parseCompanyProfitSharingCore);
+
+            parseDel.Invoke(url, ref stockInfo);
+        }
+
+        /// <summary>
+        /// This is the core process for parsing company profit sharing
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="stockInfo"></param>
+        private static void parseCompanyProfitSharingCore(string url, ref StockInfo stockInfo)
         {
             // The following implementation is based on IFeng Stock API.
             // It might need to be changed if we decide to use other API instead
@@ -211,5 +276,7 @@ namespace StockValueCalculator
         {
             return inputArray.Length > idx ? inputArray[idx] : "";
         }
+
+
     }
 }
