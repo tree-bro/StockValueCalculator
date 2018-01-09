@@ -384,8 +384,8 @@ namespace StockValueCalculator
 
         private void btnRetrieveStockInfo_Click(object sender, EventArgs e)
         {
-            
-            string stockID = comboBoxStockIDList.Text.Trim();
+            //the comboBoxStockIDList is like "stockID - companyName"
+            string stockID = comboBoxStockIDList.Text.Split('-')[0].Trim();
 
             StockMarketTypes marketType = Utils.checkMarketType(stockID);
 
@@ -452,7 +452,7 @@ namespace StockValueCalculator
                     // Persist new company info after successfully retrieved
                     if (checkBoxKeepPreferStockID.Checked)
                     {
-                        string persistString = "\n" + originalStockID + ","
+                        string persistString =        originalStockID + ","
                                                     + txtCompanyName.Text + ","
                                                     + txtDateOfInfo.Text + ","
                                                     + txtLastTradingPrice.Text + ","
@@ -462,10 +462,24 @@ namespace StockValueCalculator
                                                     + txtSecondYearProfitSharing.Text + ","
                                                     + txtThirdYearProfitSharing.Text + ","
                                                     + txtFourthYearProfitSharing.Text + ","
-                                                    + txtFifthYearProfitSharing.Text;
-                        if (!File.Exists(preferStockListFileName) || !File.ReadAllText(preferStockListFileName).Contains(persistString))
+                                                    + txtFifthYearProfitSharing.Text +
+                                                    Environment.NewLine;
+                        if (!File.Exists(preferStockListFileName) || !File.ReadAllText(preferStockListFileName).Contains(originalStockID + ","+ txtCompanyName.Text))
                         {
                             File.AppendAllText(preferStockListFileName, persistString);
+                        }else if (File.Exists(preferStockListFileName))
+                        {
+                            StringBuilder sb = new StringBuilder();
+                            foreach(string line in File.ReadAllLines(preferStockListFileName))
+                            {
+                                if(!line.StartsWith(originalStockID + "," + txtCompanyName.Text))
+                                {
+                                    sb.AppendLine(line);
+                                }else
+                                {
+                                    sb.Append(persistString);
+                                }
+                            }
                         }
                         this.updateStockIDList();
                     }

@@ -67,7 +67,12 @@ namespace StockValueCalculator
             {
                 foreach (string line in File.ReadAllLines("PreferStockList.csv"))
                 {
-                    resultList.Add(line.Split(',')[0]);
+                    //resultList.Add(line.Split(',')[0]);
+                    string[] splitLines = line.Split(',');
+                    if(splitLines.Length > 2)
+                    {
+                        resultList.Add(line.Split(',')[0] + " - " + line.Split(',')[1]);
+                    }
                 }
             }
             return resultList.ToArray();
