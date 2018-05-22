@@ -46,6 +46,7 @@
             this.ClientSize = new System.Drawing.Size(413, 49);
             this.Controls.Add(this.progressBar1);
             this.Name = "ProgressBarForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Progress";
             this.ResumeLayout(false);
 

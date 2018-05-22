@@ -480,6 +480,7 @@ namespace StockValueCalculator
                                     sb.Append(persistString);
                                 }
                             }
+                            File.WriteAllText(preferStockListFileName,sb.ToString());
                         }
                         this.updateStockIDList();
                     }
