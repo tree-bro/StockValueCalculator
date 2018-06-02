@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using System.Linq;
 using HtmlAgilityPack;
 
 namespace StockValueCalculator
@@ -57,8 +58,6 @@ namespace StockValueCalculator
             setLanguagePreference();
             setCalculationInitValues();
             setStockInfoInitValues();
-
-            
         }
 
         #region "language preference"
@@ -229,16 +228,26 @@ namespace StockValueCalculator
 
         private void resetStockInfoPageParameters()
         {
-            txtCompanyName.Text = "";
-            txtDateOfInfo.Text = "";
-            txtLastTradingPrice.Text = "";
-            txtCompanyProfitPerShare.Text = "";
-            txtPERatio.Text = "";
-            txtFirstYearProfitSharing.Text = "";
-            txtSecondYearProfitSharing.Text = "";
-            txtThirdYearProfitSharing.Text = "";
-            txtFourthYearProfitSharing.Text = "";
-            txtFifthYearProfitSharing.Text = "";
+            //txtCompanyName.Text = "";
+            //txtDateOfInfo.Text = "";
+            //txtLastTradingPrice.Text = "";
+            //txtCompanyProfitPerShare.Text = "";
+            //txtPERatio.Text = "";
+            //txtFirstYearProfitSharing.Text = "";
+            //txtSecondYearProfitSharing.Text = "";
+            //txtThirdYearProfitSharing.Text = "";
+            //txtFourthYearProfitSharing.Text = "";
+            //txtFifthYearProfitSharing.Text = "";
+            this.SetCompanyName("");
+            this.SetDateOfInfo("");
+            this.SetLastTradingPrice("");
+            this.SetCompanyProfitPerShare("");
+            this.SetPERatio("");
+            this.SetFirstYearProfitSharing("");
+            this.SetSecondYearProfitSharing("");
+            this.SetThirdYearProfitSharing("");
+            this.SetFourthYearProfitSharing("");
+            this.SetFifthYearProfitSharing("");
         }
         #endregion
 
@@ -324,7 +333,8 @@ namespace StockValueCalculator
             System.Threading.ThreadPool.QueueUserWorkItem(o => {
                 if (!txtCompanyName.Text.Trim().Equals(""))
                 {
-                    txtMarketPrice.Text = txtLastTradingPrice.Text;
+                    //txtMarketPrice.Text = txtLastTradingPrice.Text;
+                    this.SetMarketPrice(txtLastTradingPrice.Text);
                     //txtProfitPerShare.Text = txtCompanyProfitPerShare.Text;
 
                     decimal firstYearProfitSharing = decimal.Zero;
@@ -357,20 +367,26 @@ namespace StockValueCalculator
                             //if pe ratio exists, then use pe ratio to calculate the profit per share, otherwise skip the calculation of profit sharing rate
                             if (peRatio != 0m)
                             {
-                                txtProfitSharingRate.Text = Convert.ToString(decimal.Round(profitSharingPerShare / decimal.Round(marketPrice / peRatio, 4), 4) * 100);
-                                txtProfitPerShare.Text = Convert.ToString(decimal.Round(marketPrice / peRatio, 4));
+                                //txtProfitSharingRate.Text = Convert.ToString(decimal.Round(profitSharingPerShare / decimal.Round(marketPrice / peRatio, 4), 4) * 100);
+                                //txtProfitPerShare.Text = Convert.ToString(decimal.Round(marketPrice / peRatio, 4));
+                                this.SetProfitSharingRate(Convert.ToString(decimal.Round(profitSharingPerShare / decimal.Round(marketPrice / peRatio, 4), 4) * 100));
+                                this.SetProfitPerShare(Convert.ToString(decimal.Round(marketPrice / peRatio, 4)));
+                                
                             }
                         }
                         else
                         {
-                            txtProfitSharingRate.Text = Convert.ToString(decimal.Round(profitSharingPerShare / companyProfitPerShare, 4) * 100);
-                            txtProfitPerShare.Text = Convert.ToString(companyProfitPerShare);
+                            //txtProfitSharingRate.Text = Convert.ToString(decimal.Round(profitSharingPerShare / companyProfitPerShare, 4) * 100);
+                            //txtProfitPerShare.Text = Convert.ToString(companyProfitPerShare);
+                            this.SetProfitSharingRate(Convert.ToString(decimal.Round(profitSharingPerShare / companyProfitPerShare, 4) * 100));
+                            this.SetProfitPerShare(Convert.ToString(companyProfitPerShare));
                         }
                     }
 
                     MessageBox.Show(parseCompanyDetailsFromServerSuccessMessage.Replace("[_COMPANY_NAME_]", txtCompanyName.Text.Trim()));
 
-                    tabControl1.SelectTab(calculationPage);
+                    //tabControl1.SelectTab(calculationPage);
+                    this.SelectTabPage(calculationPage);
                     resetStockInfoPageParameters();
                 }
                 else
@@ -553,7 +569,7 @@ namespace StockValueCalculator
         private void comboBoxStockIDList_SelectedIndexChanged(object sender, EventArgs e)
         {
             int idx = comboBoxStockIDList.SelectedIndex;
-            string[] fileContent = File.ReadAllLines(preferStockListFileName);
+            string[] fileContent = File.ReadAllLines(preferStockListFileName).Where(txt=>txt.Trim() != "").ToArray();
             string[] fileContentArray = fileContent[idx].Split(',');
 
             if (fileContent.Length >= idx)
@@ -689,6 +705,53 @@ namespace StockValueCalculator
             else
             {
                 this.txtFifthYearProfitSharing.Text = fifthYearProfitSharing;
+            }
+        }
+
+        public void SetMarketPrice(string txt)
+        {
+            if (this.txtMarketPrice.InvokeRequired)
+            {
+                this.txtMarketPrice.Invoke(new Utils.SetParameterDelegate(SetMarketPrice), txt);
+            }else
+            {
+                this.txtMarketPrice.Text = txt;
+            }
+        }
+
+        public void SetProfitPerShare(string txt)
+        {
+            if (this.txtProfitPerShare.InvokeRequired)
+            {
+                this.txtProfitPerShare.Invoke(new Utils.SetParameterDelegate(SetProfitPerShare), txt);
+            }
+            else
+            {
+                this.txtProfitPerShare.Text = txt;
+            }
+        }
+
+        public void SetProfitSharingRate(string txt)
+        {
+            if (this.txtProfitSharingRate.InvokeRequired)
+            {
+                this.txtProfitSharingRate.Invoke(new Utils.SetParameterDelegate(SetProfitSharingRate),txt);
+            }
+            else
+            {
+                this.txtProfitSharingRate.Text = txt;
+            }
+        }
+
+        public void SelectTabPage(TabPage page)
+        {
+            if (this.tabControl1.InvokeRequired)
+            {
+                this.tabControl1.Invoke(new Utils.ChangeTabPageDelegate(SelectTabPage),page);
+            }
+            else
+            {
+                this.tabControl1.SelectedTab = page;
             }
         }
         #endregion

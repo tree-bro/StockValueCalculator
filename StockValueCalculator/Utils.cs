@@ -5,6 +5,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace StockValueCalculator
 {
@@ -20,6 +21,7 @@ namespace StockValueCalculator
 
         public delegate void InvokeDelegate();
         public delegate void SetParameterDelegate(string input);
+        public delegate void ChangeTabPageDelegate(TabPage page);
 
         public static HtmlAgilityPack.HtmlDocument loadHtmlDocument(string url, Encoding encoding)
         {
