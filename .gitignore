@@ -8,3 +8,5 @@ packages
 *.cache
 *.ide
 *.Cache
+Debug/
+Release/
